@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://wingshub.co";
+const DEFAULT_SITE_URL = "https://wingshub.ca";
 
 /**
  * Single place for non-content configuration.

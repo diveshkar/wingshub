@@ -6,6 +6,7 @@ import { MenuSection } from "@/components/menu/menu-section";
 import { PageHero } from "@/components/sections/page-hero";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
+import { SauceSplash } from "@/components/ui/sauce-splash";
 import {
   getMenuOutline,
   getMenuSections,
@@ -32,7 +33,7 @@ export default async function MenuPage() {
 
   return (
     <>
-      <PageHero title={content.hero.title} intro={content.hero.intro}>
+      <PageHero title={content.hero.title} intro={content.hero.intro} art={<SauceSplash />}>
         {(content.pricesNote || content.spiceNote) && (
           <div className="mt-3 space-y-1 text-sm text-ink-400">
             {content.pricesNote && <p>{content.pricesNote}</p>}

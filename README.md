@@ -131,6 +131,20 @@ Photos currently in `public/images/menu/` that no menu item uses: `garlic-bread.
 `cheesy-garlic-bread.jpg` (not on the supplied menu), `wings-cream-sauce-parmesan.jpg`,
 `wings-three-styles.jpg`, `boneless-wings-dark.jpg` and `wing-flavours-wide.jpg`.
 
+### Animation
+
+- `public/images/animation/` holds the pictures used for motion. `wing-drip.webp` and
+  `wings-splash.webp` are the wings that fly in and drift around the home page photo, and
+  `sauce-splash.webp` is the splash on the Menu page header (shown from 1280 px wide). They were cut
+  out of the three supplied JPGs, which are still in the same folder.
+- The motion is plain CSS (the "Motion" block in `app/globals.css`) plus two small components,
+  `FloatingWing` and `SauceSplash`. The hero text rises in, section titles and cards fade up as they
+  scroll into view, menu cards lift on hover and buttons press down. There is no animation library
+  and no extra JavaScript.
+- Everything is switched off for visitors whose device is set to reduce motion.
+- To change a picture, replace the WebP with a new cut-out that has a transparent background and
+  update its `width` and `height` in `components/sections/hero.tsx`.
+
 ### Logo and icons
 
 - `public/images/brand/logo.jpg` is the supplied logo (opaque, black background). It is used for
@@ -177,11 +191,11 @@ keep the name, address and phone identical to the Google Business Profile.
 
 1. Push the repository to GitHub and import it in Netlify. The build settings are detected
    automatically (`netlify.toml` only pins the Node version).
-2. Add the domain `wingshub.co` and choose whether `www` redirects to it.
+2. Add the domain `wingshub.ca` and choose whether `www` redirects to it.
 3. Set environment variables from `.env.example` if you need to change them.
 4. **Contact form:** Netlify Forms is wired through `public/__forms.html`. After the first deploy,
    open Forms in the Netlify dashboard, confirm a form named `contact` exists, and add an email
-   notification to `info@wingshub.co`. The form only works on Netlify, not in local development.
+   notification to `info@wingshub.ca`. The form only works on Netlify, not in local development.
 
 ### Launch checklist
 
@@ -191,12 +205,13 @@ keep the name, address and phone identical to the Google Business Profile.
 - [ ] Owner has checked the wording for halal, payment methods (cash and card) and tax (menu prices exclude tax)
 - [ ] Optional: coordinates and Google Maps link in `locations.json`, social links in `restaurant.json`
 - [ ] Menu transcription (`menu-categories.json`, `menu-items.json`, `wing-flavours.json`) proofread against the printed menu
-- [x] Brand name confirmed as "Wings Hub" (two words; the domain and email stay `wingshub.co`)
+- [x] Brand name confirmed as "Wings Hub" (two words; the domain and email stay `wingshub.ca`)
 - [ ] Photos for the items that still show a placeholder
+- [ ] The three source images in `public/images/animation/` look like stock-site previews (small, from Adobe Stock and Freepik). Confirm they may be used commercially, or replace them with licensed or original images, and delete the unused JPGs from `public/` before launch
 - [ ] Brand copy in `pages/*.json`, `faqs.json` and `seo.json` reviewed
 - [ ] Privacy policy page added (the contact form collects personal information)
 - [ ] Every data file marked `"confirmed"`, then `NEXT_PUBLIC_CONTENT_STATUS=live`
-- [ ] Submit `https://wingshub.co/sitemap.xml` in Google Search Console and Bing Webmaster Tools
+- [ ] Submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
 
 ## Design tokens
 

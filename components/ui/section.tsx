@@ -41,7 +41,7 @@ type SectionHeadingProps = {
 
 export function SectionHeading({ title, description, id, onDark = false, className }: SectionHeadingProps) {
   return (
-    <div className={cn("max-w-2xl", className)}>
+    <div className={cn("reveal max-w-2xl", className)}>
       <span aria-hidden="true" className="mb-4 block h-1 w-12 bg-flame-500" />
       <h2 id={id} className="text-h2">
         {title}

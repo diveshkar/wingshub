@@ -117,6 +117,116 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes photo-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* A cut-out wing flies in and settles at its tilt (--tilt), then drifts gently up and down. */
+@keyframes wing-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(2.5rem, -3rem, 0) rotate(calc(var(--tilt) + 16deg)) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(var(--tilt)) scale(1);
+  }
+}
+
+@keyframes wing-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(var(--tilt));
+  }
+  to {
+    transform: translate3d(0, -0.6rem, 0) rotate(calc(var(--tilt) + 3deg));
+  }
+}
+
+@keyframes splash-enter {
+  from {
+    opacity: 0;
+    transform: translateX(3rem) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes splash-breathe {
+  from {
+    transform: none;
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer components {
+  .rise-in {
+    animation: rise-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .hero-photo img {
+    animation: photo-settle 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .wing-float {
+    filter: drop-shadow(0 1.1rem 1.1rem rgb(0 0 0 / 0.5));
+    animation:
+      wing-enter 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0.4s) both,
+      wing-drift var(--duration, 7s) ease-in-out calc(var(--delay, 0.4s) + 1s) infinite alternate;
+  }
+
+  .sauce-splash {
+    transform-origin: right center;
+    animation:
+      splash-enter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both,
+      splash-breathe 9s ease-in-out 1.4s infinite alternate;
+  }
+
+  /* Fades up as it scrolls into view. Browsers without scroll-driven animations simply show it. */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Type scale                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -156,5 +266,18 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* No movement at all: everything simply rests in its final position. */
+  .reveal,
+  .rise-in,
+  .hero-photo img,
+  .wing-float,
+  .sauce-splash {
+    animation: none !important;
+  }
+
+  .wing-float {
+    transform: rotate(var(--tilt));
   }
 }

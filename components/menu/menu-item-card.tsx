@@ -39,17 +39,22 @@ export function MenuItemCard({
   return (
     <article
       className={cn(
-        "flex h-full overflow-hidden rounded-xl border border-ink-900/10 bg-bone-50",
+        "reveal group flex h-full overflow-hidden rounded-xl border border-ink-900/10 bg-bone-50 transition duration-200 hover:-translate-y-1 hover:border-ink-900/20 hover:shadow-[0_22px_36px_-24px_rgb(13_13_14/0.55)] motion-reduce:transition-none",
         responsive ? "flex-row sm:flex-col" : "flex-col",
       )}
     >
       <div
         className={cn(
-          "relative shrink-0 bg-ink-800",
+          "relative shrink-0 overflow-hidden bg-ink-800",
           responsive ? "w-28 sm:aspect-[4/3] sm:w-auto" : "aspect-[4/3]",
         )}
       >
-        <FoodImage image={item.image} icon={icon} sizes={SIZES[layout]} />
+        <FoodImage
+          image={item.image}
+          icon={icon}
+          sizes={SIZES[layout]}
+          className="transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
+        />
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">

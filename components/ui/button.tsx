@@ -6,10 +6,11 @@ type Variant = "primary" | "dark" | "light" | "outline-light" | "outline-dark";
 type Size = "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-md font-display font-bold uppercase tracking-[0.06em] whitespace-nowrap transition-colors duration-150 disabled:pointer-events-none disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-md font-display font-bold uppercase tracking-[0.06em] whitespace-nowrap transition-[color,background-color,border-color,box-shadow,translate] duration-150 active:translate-y-px disabled:pointer-events-none disabled:opacity-60";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-flame-500 text-bone-50 hover:bg-flame-600",
+  primary:
+    "bg-flame-500 text-bone-50 hover:bg-flame-600 hover:shadow-[0_10px_24px_-10px_rgb(229_8_13/0.7)]",
   dark: "bg-ink-900 text-bone-50 hover:bg-ink-700",
   light: "bg-bone-50 text-ink-900 hover:bg-bone-200",
   "outline-light": "border border-bone-50/40 text-bone-50 hover:border-bone-50 hover:bg-bone-50/10",

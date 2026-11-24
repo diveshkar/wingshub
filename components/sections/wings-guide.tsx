@@ -25,7 +25,7 @@ export async function WingsGuide() {
           </ButtonLink>
         </div>
 
-        <div className="space-y-8 rounded-xl bg-ink-900 p-6 text-bone-50 sm:p-8">
+        <div className="reveal space-y-8 rounded-xl bg-ink-900 p-6 text-bone-50 sm:p-8">
           {items.map((item) => (
             <div key={item.id}>
               <h3 className="font-display text-sm font-bold uppercase tracking-[0.12em] text-flame-400">
