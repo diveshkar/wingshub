@@ -22,7 +22,9 @@
     --stage-d: min(30rem, 44svh, calc(100vw - 2.5rem));
     --stick-top: calc(var(--header-h) + 0.75rem);
     --step-len: 50svh;
-    --caption-h: 9.5rem;
+    --caption-h: 12.5rem;
+    /* The gap between the plate and the captions under it (see .story-captions). */
+    --caption-gap: 1.25rem;
     display: block;
   }
 
@@ -30,19 +32,28 @@
     margin-bottom: 2rem;
   }
 
+  /*
+    On a phone the captions sit under the plate. Both stay pinned while the story plays and then have to
+    leave together. The plate would otherwise stay pinned until the very bottom of the section, longer than
+    the captions (which leave when their own box ends), and the text would slide up behind it. So the plate's
+    margin keeps it from sinking into the space the captions need at the end, and the track pulls back up by
+    the same amount, which leaves the layout itself where it was.
+  */
   .story-sticky {
     position: sticky;
     top: var(--stick-top);
     z-index: 2;
+    margin-bottom: calc(var(--caption-h) + var(--caption-gap));
   }
 
   .story-track {
     height: calc(4 * var(--step-len) + var(--caption-h));
+    margin-top: calc(-1 * (var(--caption-h) + var(--caption-gap)));
   }
 
   .story-captions {
     position: sticky;
-    top: calc(var(--stick-top) + var(--stage-d) + 1.25rem);
+    top: calc(var(--stick-top) + var(--stage-d) + var(--caption-gap));
     display: grid;
     min-height: var(--caption-h);
     align-content: start;
@@ -110,10 +121,12 @@
     .story-sticky {
       grid-area: stage;
       align-self: start;
+      margin-bottom: 0;
     }
 
     .story-track {
       grid-area: track;
+      margin-top: 0;
     }
 
     .story-captions {
@@ -394,16 +407,19 @@
     opacity: calc(var(--veil) * 0.85);
   }
 
-  /* A flash of sauce hides the change from cooking to tossing. */
+  /*
+    A flash of sauce hides the change from cooking to tossing. It is a plain gradient on purpose: with
+    mix-blend-mode: screen, Chrome paints a dark square around the round plate on phones (the square is
+    the plate's box, showing outside the circle).
+  */
   .story-veil-sauce {
     --flash: 0;
     background: radial-gradient(
       circle at 56% 56%,
-      rgb(255 150 60 / 0.9),
-      rgb(229 8 13 / 0.5) 48%,
+      rgb(255 170 80 / 0.85),
+      rgb(229 8 13 / 0.45) 48%,
       transparent 78%
     );
-    mix-blend-mode: screen;
     opacity: var(--flash);
   }
 
@@ -951,6 +967,11 @@
 
   .story-track {
     height: auto;
+    margin-top: 0;
+  }
+
+  .story-sticky {
+    margin-bottom: 0;
   }
 
   .story-captions {
