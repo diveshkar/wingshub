@@ -22,6 +22,8 @@ export type Sauce = {
   dispose: () => void;
   /** Give the graphics context back, for good. */
   release: () => void;
+  /** Draw smaller (and so faster): for a computer that cannot keep up. */
+  lower: () => void;
 };
 
 const VERT = `
@@ -395,6 +397,7 @@ export function createSauce(canvas: HTMLCanvasElement, onLost?: () => void): Sau
 
   let width = window.innerWidth;
   let height = window.innerHeight;
+  let quality = 1;
   let items = buildItems(width, height);
   const limit = Math.floor((gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS) as number) / 2) - 8;
   let count = Math.max(8, Math.min(items.length, limit));
@@ -444,8 +447,10 @@ export function createSauce(canvas: HTMLCanvasElement, onLost?: () => void): Sau
     height = window.innerHeight;
     items = buildItems(width, height);
     count = Math.min(count, items.length);
-    // The sauce is soft, so it is drawn at a lower resolution and stretched: much less work for the phone.
-    const q = Math.min(0.8, 0.5 * Math.min(window.devicePixelRatio || 1, 2));
+    // The sauce is soft, so it is drawn at a lower resolution and stretched. The number of pixels it paints
+    // is capped (about 0.42 million, whatever the screen), so a big or sharp screen costs no more than a small one.
+    const q =
+      Math.min(0.8, 0.5 * Math.min(window.devicePixelRatio || 1, 2), Math.sqrt(420000 / (width * height))) * quality;
     canvas.width = Math.max(2, Math.round(width * q));
     canvas.height = Math.max(2, Math.round(height * q));
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -487,6 +492,10 @@ export function createSauce(canvas: HTMLCanvasElement, onLost?: () => void): Sau
     },
     release: () => {
       gl.getExtension("WEBGL_lose_context")?.loseContext();
+    },
+    lower: () => {
+      quality = Math.max(0.3, quality * 0.65);
+      resize();
     },
   };
 }

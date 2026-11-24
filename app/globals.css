@@ -54,6 +54,13 @@
     scroll-behavior: smooth;
     scroll-padding-top: 9rem;
     -webkit-text-size-adjust: 100%;
+    /* The scrollbar is hidden; scrolling by wheel, touch, keyboard and trackpad works as normal. */
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   body {

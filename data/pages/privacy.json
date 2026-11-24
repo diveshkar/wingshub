@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "status": "confirmed"
+  },
+  "hero": {
+    "title": "Privacy policy",
+    "intro": "How Wings Hub handles the details you send us."
+  },
+  "sections": [
+    {
+      "heading": "What we collect",
+      "paragraphs": [
+        "If you use the contact form, we receive the name, email address, optional phone number and message you type in. We do not ask for anything else."
+      ]
+    },
+    {
+      "heading": "How we use it",
+      "paragraphs": [
+        "We use these details only to reply to your message. We keep a message only as long as we need it to reply."
+      ]
+    },
+    {
+      "heading": "Who handles it",
+      "paragraphs": [
+        "The contact form is hosted by Netlify, our website host. Netlify stores the message and passes it on to us by email."
+      ]
+    },
+    {
+      "heading": "Cookies",
+      "paragraphs": [
+        "This website does not use advertising or analytics cookies."
+      ]
+    },
+    {
+      "heading": "Maps and other websites",
+      "paragraphs": [
+        "The map on our pages is provided by Google Maps. When it loads, Google may collect information under its own privacy policy. Links to other websites, such as delivery apps, are covered by those sites' own policies."
+      ]
+    },
+    {
+      "heading": "Your choices",
+      "paragraphs": [
+        "To see, correct or delete the details you sent us, email us at the address below."
+      ]
+    }
+  ]
+}

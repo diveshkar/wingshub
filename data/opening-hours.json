@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "The owner gave 3 p.m. to 12 a.m. (midnight) without naming days, so it is applied to all seven days. If a day differs or is closed, change that row (24-hour HH:MM, midnight is 00:00) and then mark as confirmed."
+    "status": "confirmed"
   },
   "openingHours": [
     { "locationId": "main", "day": "monday", "status": "open", "opens": "15:00", "closes": "00:00" },

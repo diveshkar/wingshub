@@ -60,10 +60,12 @@ export type HomeContent = Strip<z.infer<typeof S.HomePageFileSchema>>;
 export type AboutContent = Strip<z.infer<typeof S.AboutPageFileSchema>>;
 export type MenuPageContent = Strip<z.infer<typeof S.MenuPageFileSchema>>;
 export type ContactPageContent = Strip<z.infer<typeof S.ContactPageFileSchema>>;
+export type PrivacyContent = Strip<z.infer<typeof S.PrivacyPageFileSchema>>;
 
 export interface PageContentMap {
   home: HomeContent;
   about: AboutContent;
   menu: MenuPageContent;
   contact: ContactPageContent;
+  privacy: PrivacyContent;
 }

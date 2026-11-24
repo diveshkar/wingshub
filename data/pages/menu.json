@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Draft copy. The tax note and the spicy level range (1 to 6) come from the owner. The footnote is the allergy disclaimer printed on the supplied menu."
+    "status": "confirmed"
   },
   "hero": {
     "title": "Menu",

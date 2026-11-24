@@ -6,8 +6,6 @@
 
 [build.environment]
   NODE_VERSION = "22"
-
-# Launch switch. Production stays in draft mode (noindex, robots.txt disallow, draft banner)
-# until you set this in Site configuration > Environment variables:
-#   NEXT_PUBLIC_CONTENT_STATUS = live
-# The build fails if any file in /data is still marked "draft" when this is set.
+  # The site is live: indexable, no draft banner. The build fails if any file in /data is marked "draft".
+  # To hide the site again, for example while testing big changes, change this to "draft".
+  NEXT_PUBLIC_CONTENT_STATUS = "live"

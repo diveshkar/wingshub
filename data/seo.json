@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Draft titles and descriptions using the real location and menu. Keep titles under about 60 characters and descriptions under about 155 so they are not truncated in search results."
+    "status": "confirmed"
   },
   "defaults": {
     "titleTemplate": "%s | Wings Hub",
@@ -24,6 +23,10 @@
     "contact": {
       "title": "Contact & Location",
       "description": "Find Wings Hub at Unit 103, 825 Passmore Ave, Scarborough, ON M1X 1C8. Call, email or use the contact form to get in touch."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "How Wings Hub handles the details you send through the contact form and what the website does and does not collect."
     }
   }
 }

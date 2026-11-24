@@ -14,6 +14,7 @@ import homeJson from "@/data/pages/home.json";
 import aboutJson from "@/data/pages/about.json";
 import menuPageJson from "@/data/pages/menu.json";
 import contactPageJson from "@/data/pages/contact.json";
+import privacyPageJson from "@/data/pages/privacy.json";
 import type { PageContentMap } from "@/types";
 import { assertDataIntegrity } from "./integrity";
 import {
@@ -28,6 +29,7 @@ import {
   MenuPageFileSchema,
   NavigationFileSchema,
   OpeningHoursFileSchema,
+  PrivacyPageFileSchema,
   RestaurantFileSchema,
   SeoFileSchema,
   WingFlavoursFileSchema,
@@ -78,6 +80,7 @@ const pageContent: PageContentMap = {
   about: stripMeta(load("data/pages/about.json", AboutPageFileSchema, aboutJson)),
   menu: stripMeta(load("data/pages/menu.json", MenuPageFileSchema, menuPageJson)),
   contact: stripMeta(load("data/pages/contact.json", ContactPageFileSchema, contactPageJson)),
+  privacy: stripMeta(load("data/pages/privacy.json", PrivacyPageFileSchema, privacyPageJson)),
 };
 
 assertDataIntegrity({

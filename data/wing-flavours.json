@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "The 40 wing flavours transcribed from the supplied menu PDF, with capitalisation tidied ('Hot Honney' read as 'Hot Honey', 'CYLONIYA' as 'Cyloniya'). Proofread the spellings, then mark as confirmed."
+    "status": "confirmed"
   },
   "title": "Wing flavours",
   "description": "Pick your flavour for every order of wings. Bigger orders let you mix in more flavours.",

@@ -71,12 +71,13 @@ shipping a broken page.
 
 Each data file has a `_meta.status` of `"draft"` or `"confirmed"`.
 
-- The site ships in **draft mode**: a banner is shown, pages are `noindex`, and `robots.txt`
-  disallows crawling. This stops unfinished content from being indexed.
-- Check each file (the menu was transcribed from the supplied PDF, so proofread it), then set its
-  `status` to `"confirmed"`.
-- When every file is confirmed, set `NEXT_PUBLIC_CONTENT_STATUS=live`. The build fails if you set
-  it while any file is still `"draft"`.
+- **Draft mode** (the default when `NEXT_PUBLIC_CONTENT_STATUS` is not set, so local development): a banner
+  is shown, pages are `noindex`, and `robots.txt` disallows crawling.
+- **Live mode** (`NEXT_PUBLIC_CONTENT_STATUS=live`, set in `netlify.toml` for the Netlify build): no banner,
+  pages are indexable, and `robots.txt` and the sitemap are published. The build fails in live mode while any
+  data file is still `"draft"`.
+- All data files are now `"confirmed"`. When you add a new data file or change content that the owner has not
+  seen yet, mark it `"draft"` until they have; the live build will then stop and tell you which file.
 
 ### Adding or editing a menu item
 
@@ -136,14 +137,14 @@ Photos currently in `public/images/menu/` that no menu item uses: `garlic-bread.
 **The opening (first thing on the home page).** The screen goes dark and two big fried wings fly in from
 opposite sides, hit each other in the middle (a flash, a small jolt of the camera), and thick glossy sauce
 bursts out across the screen, splatters on the "lens", spreads over everything and then runs down the
-screen, which uncovers the page. Behind it the round plate settles into place and the scroll story
-starts. It plays once per visit: it is skipped for visitors who asked for less motion or to save data, for
-anyone who has already scrolled, and when moving between pages. A tap, key press or scroll skips it, and
-adding `?intro` to the address plays it again (for showing the owner). On a live site it is also skipped
-if the page took more than 4.5 seconds to wake up. If anything stalls, the CSS removes the cover by itself
-(5 seconds after it started playing, or 9 seconds after the page opened if it never started), and without
-JavaScript it is never shown. If the graphics card cannot draw the sauce, the wings still collide and the
-cover fades away.
+screen, which uncovers the first screen, where the two wings then drop onto a black board (see below). It
+plays once per visit: it is skipped for visitors who asked for less motion or to save data, for anyone who
+has already scrolled, and when moving between pages (the board then just shows up with the wings already
+on it). A tap, key press or scroll skips it, and adding `?intro` to the address plays it again (for showing
+the owner). On a live site it is also skipped if the page took more than 4.5 seconds to wake up. If anything
+stalls, the CSS removes the cover by itself (5 seconds after it started playing, or 9 seconds after the page
+opened if it never started), and without JavaScript it is never shown. If the graphics card cannot draw the
+sauce, the wings still collide and the cover fades away.
 
 - `components/story/intro-splash.tsx` runs it and the "full-screen opening" part at the end of
   `app/story.css` holds its timeline (impact at 1250 ms, the page's own animation allowed from 2800 ms,
@@ -157,45 +158,43 @@ cover fades away.
   tail that wriggles and then pinches into beads, plus fine spray and a few blobs that hit the lens and
   slide. The shader gives them a surface height and lights them from the upper left: thick sauce is deep
   red, thin sauce shows the warm light behind it as orange, and the shine is a soft window reflection.
-  It draws at about half resolution (it is soft anyway), and where WebGL is missing the cover simply fades.
+  It draws at a low resolution (it is soft anyway, and never more than about 0.4 million pixels, whatever the
+  screen). A computer that cannot keep up gets a smaller sauce and, if that is still too slow, no opening
+  (`lower()` in `intro-sauce.ts`, checked in `intro-splash.tsx`). Where WebGL is missing the cover simply fades.
 - `public/images/intro/` is 50 KB in total and only loads for animated visitors' first view. Better wing
   pictures can be dropped in under the same names (a 400 to 500 px wing, transparent background, lit from
   the upper left); the sizes are set in `WINGS` in `intro-splash.tsx`.
 
-**The wing story (the plate).** The hero photo sits in a round plate; nothing is placed on top of it (the
-two wings that used to drop onto it were removed because they did not match the photo). As the visitor
-scrolls, the plate stays pinned and the round window opens onto four real kitchen photos, one
-for each caption: wings being **dusted** with spice, **cooked** (a fry basket), **tossed** in sauce, and a
-finished wing with a **bite** taken out. Each change has its own transition: the dusting photo opens from
-the sieve, steam clouds over to bring in the basket, a flash of sauce brings in the toss, and then three
-bites tear the toss photo away to show the bitten wing underneath. Spice, steam, sauce drops and crumbs
-drift over the photos. The captions come from `story.steps` in `data/pages/home.json` (exactly four, in
-that order).
+**The first screen and the plate.** On the first screen the plate is a wide black stone board lying on the
+table, tilted towards the visitor. The two wings from the opening drop onto it: each falls at constant
+acceleration, squashes as it hits, hops twice and settles, with a shadow on the board that tightens as the wing
+comes down. At each touchdown crumbs and flecks of sauce fly out in a fan, bounce and come to rest on the board
+and the table; the flecks leave small splats. Then, as the visitor scrolls, the board stands up and turns round
+(one number, `--flat`, goes from 1 to 0 and drives the tilt, the shape, the wings fading and the photo fading
+in), and the plate stays pinned as a round window onto one kitchen photo: wings being dusted with spice. The photo
+pushes in slowly and spice drifts down over it while the four captions go by. The captions come from
+`story.steps` in `data/pages/home.json` (exactly four, in that order).
 
 - `app/story.css` holds the layout and the effects, and `components/story/` the pieces: `story-stage.tsx`
-  (plate, spice, steam, sauce, crumbs), `story-scenes.tsx` (the four photos), `story-controller.tsx`
-  (turns the scroll position into numbers; each number goes only onto the element that uses it, so the
-  browser never re-checks the whole stage), `bite-mask.ts` (the shape of the three bites),
-  `story-photos.ts` (file names and alt text) and `static-photo.tsx`. The plate's own animation waits for
-  the opening: `data-intro` on the hero section is "wait" until the opening says "go". Then the plate
-  rises a little and settles (`plate-arrive` in `app/story.css`) while the sauce drains off it. To change
+  (the board, the wings, the plate, the photo, the spice), `story-controller.tsx` (turns the scroll position
+  into numbers; each number goes only onto the element that uses it, so the browser never re-checks the whole
+  stage) and `story-photos.ts` (file name and alt text of the photo). `land-sim.ts` is the physics of the
+  crumbs (no page in it) and `land-fx.tsx` draws it on a canvas. The first screen waits for the opening:
+  `data-intro` on the hero section is "wait" until the opening says "go" (play the landing) or "done" (show
+  it finished). The wings' timing is in `app/story.css` (`--dur`, `--delay-a`, `--delay-b`, the `land-*`
+  keyframes) and the touchdown times in `IMPACTS` in `land-sim.ts`: change one, change the other. To change
   the timing of the scroll part, edit `scene()` in `story-controller.tsx`.
-- The four photos are `public/images/story/dusting.webp`, `cooking.webp`, `tossing.webp` and `biting.webp`
-  (square, 1200 x 1200). To use the restaurant's own pictures, replace the four files with square photos
-  of the same four moments, keep the names, and update the alt text in `story-photos.ts`. The "Cooked
-  until crisp." caption goes with the fry-basket photo: check how the wings are really cooked and change
-  the caption in `home.json` if needed.
-- `public/images/animation/` holds `sauce-splash.webp` (the splash on the Menu page header, shown from
-  1280 px wide). It was cut out of the supplied JPGs, which are still in the same folder.
-- Loading: the four photos are not part of the first view. They are added after the page has loaded and
-  the browser is idle (about 80 KB in total on a laptop), so the headline, the plate and the text arrive
-  first.
+- `public/images/story/board.webp` is the empty black marble board (1400 x 1004, rounded corners, lit from the
+  upper left). It was generated, not photographed; any dark board picture of the same proportions with
+  transparent corners can replace it. The two wings are the same files as in the opening
+  (`public/images/intro/wing-a.webp` and `wing-b.webp`).
+- The photo is `public/images/story/dusting.webp` (square, 1200 x 1200). To use the restaurant's own picture,
+  replace the file with a square photo of the same moment, keep the name, and update the alt text in
+  `story-photos.ts`.
+- `public/images/animation/sauce-splash.webp` is the splash on the Menu page header, shown from 1280 px wide.
+- The photo loads together with the page at low priority (about 115 KB), after the board and the wings.
 
-**The sauce edge** between the hero and "How the wings work" is drawn by the same kind of shader
-(`components/story/sauce-banner.ts`, started by `sauce-canvas.tsx`): a thick band of glossy sauce with
-teardrop drips, a soft red shadow on the cream, and light that slides a little as the page scrolls. It pours
-when it scrolls into view and then rests. The plain CSS drips (`.sauce-fallback`) show until it starts, and
-stay for visitors without JavaScript or WebGL.
+There is no sauce edge under the first screen: the "How the wings work" section starts clean.
 
 - Elsewhere the motion is CSS only (the "Motion" block in `app/globals.css`): the hero text rises in, and
   on every section the titles, cards, price table, map and questions rise and zoom in a little as they
@@ -204,8 +203,9 @@ stay for visitors without JavaScript or WebGL.
   photo is a scroller that never scrolls). Menu cards lift on hover and buttons press down. There is no
   animation library, and browsers without scroll-driven animations simply show everything at rest.
 - For visitors whose device is set to reduce motion, or without JavaScript, nothing moves and nothing
-  covers the page: the plate shows the dish, and the four captions are plain text,
-  each with its photo underneath (these photos are only downloaded by those visitors).
+  covers the page: there is no board and no wings, the plate is already round and shows the dish, and the
+  four captions are plain text, each with its photo underneath (these photos are only downloaded by those
+  visitors).
 
 ### Logo and icons
 
@@ -254,27 +254,29 @@ keep the name, address and phone identical to the Google Business Profile.
 1. Push the repository to GitHub and import it in Netlify. The build settings are detected
    automatically (`netlify.toml` only pins the Node version).
 2. Add the domain `wingshub.ca` and choose whether `www` redirects to it.
-3. Set environment variables from `.env.example` if you need to change them.
+3. `netlify.toml` already sets `NEXT_PUBLIC_CONTENT_STATUS=live`. Other variables from `.env.example` are optional.
 4. **Contact form:** Netlify Forms is wired through `public/__forms.html`. After the first deploy,
    open Forms in the Netlify dashboard, confirm a form named `contact` exists, and add an email
    notification to `info@wingshub.ca`. The form only works on Netlify, not in local development.
 
 ### Launch checklist
 
-- [x] Address (`locations.json`) and menu, flavours, logo and photos supplied
-- [x] Phone number in `contact.json`, opening hours in `opening-hours.json` (3 p.m. to midnight is applied to all seven days; check this with the owner)
+Done:
+
+- [x] Address, phone, opening hours (3 p.m. to midnight, all seven days), menu, flavours, logo and photos
+- [x] Brand name "Wings Hub" (two words; the domain and email stay `wingshub.ca`)
+- [x] Privacy policy page (`/privacy`, copy in `data/pages/privacy.json`), linked from the footer
+- [x] Every data file marked `"confirmed"`; `NEXT_PUBLIC_CONTENT_STATUS=live` in `netlify.toml`
+
+Still open (the site works without them, but they should be dealt with):
+
 - [ ] Uber Eats and DoorDash links: add the URLs under `onlineOrdering` in `restaurant.json` (the names show as plain text until then)
-- [ ] Owner has checked the wording for halal, payment methods (cash and card) and tax (menu prices exclude tax)
+- [ ] Opening hours: confirm with the owner whether every day really is 3 p.m. to midnight
 - [ ] Optional: coordinates and Google Maps link in `locations.json`, social links in `restaurant.json`
-- [ ] Menu transcription (`menu-categories.json`, `menu-items.json`, `wing-flavours.json`) proofread against the printed menu
-- [x] Brand name confirmed as "Wings Hub" (two words; the domain and email stay `wingshub.ca`)
-- [ ] Photos for the items that still show a placeholder
-- [ ] The three source images in `public/images/animation/` look like stock-site previews (small, from Adobe Stock and Freepik), and the four photos in `public/images/story/` (and the two wings and backdrop in `public/images/intro/`, cut from the tossing photo) also look like stock pictures. Confirm they may be used commercially, or replace them with licensed or original images (the restaurant's own kitchen photos are best), and delete the unused JPGs from `public/` before launch
-- [ ] Owner has checked the four wing story captions in `home.json` (`story.steps`), especially "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from"
-- [ ] Brand copy in `pages/*.json`, `faqs.json` and `seo.json` reviewed
-- [ ] Privacy policy page added (the contact form collects personal information)
-- [ ] Every data file marked `"confirmed"`, then `NEXT_PUBLIC_CONTENT_STATUS=live`
-- [ ] Submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
+- [ ] Photos for the menu items that still show no picture
+- [ ] The photo in `public/images/story/` (and the two wings and backdrop in `public/images/intro/`, cut from a supplied picture) look like stock pictures. Confirm they may be used commercially, or replace them with licensed or original images (the restaurant's own kitchen photos are best)
+- [ ] The four captions in `home.json` (`story.steps`): "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from". Only the dusting photo is shown, so the second to fourth captions have no matching photo
+- [ ] After the first deploy: confirm the `contact` form appears in Netlify, add the email notification to `info@wingshub.ca`, and submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
 
 ## Design tokens
 

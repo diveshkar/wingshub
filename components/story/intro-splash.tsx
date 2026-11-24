@@ -51,8 +51,9 @@ export function IntroSplash() {
     if (!element || !surface) return;
     const overlay: HTMLDivElement = element;
 
-    const go = () => {
-      if (section) section.dataset.intro = "go";
+    // "go" lets the first screen play (the two wings landing on the board); "done" shows it already finished.
+    const go = (mode: "go" | "done" = "go") => {
+      if (section && section.dataset.intro === "wait") section.dataset.intro = mode;
     };
 
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
@@ -61,13 +62,14 @@ export function IntroSplash() {
     // On a real connection, a page that took more than 4.5 s to wake up has been showing the dark cover for
     // too long already, so the opening is dropped. (The development server is always slow at first.)
     const late = process.env.NODE_ENV === "production" && performance.now() > 4500;
-    const skipFromTheStart =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      (!forced && (played || connection?.saveData || window.scrollY > 40 || late));
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Seen it already, saving data, or scrolled away: the first screen just shows up finished.
+    const seen = Boolean(played || connection?.saveData || window.scrollY > 40);
+    const skipFromTheStart = reduced || (!forced && (seen || late));
 
     if (skipFromTheStart) {
       overlay.dataset.state = "done";
-      go();
+      go(reduced || seen ? "done" : "go");
       return;
     }
 
@@ -141,8 +143,31 @@ export function IntroSplash() {
 
       // Take the start time from the wing's own animation so the sauce is in step with it.
       let start = performance.now();
+      // A computer that cannot keep up is given a smaller sauce and, if that is still too slow, no opening
+      // at all: a stuttering opening is worse than none.
+      const gaps: number[] = [];
+      let previous = 0;
+      let lowered = false;
       const loop = (now: number) => {
         sauce?.draw((now - start - IMPACT) / 1000);
+
+        if (previous && now - start > IMPACT) {
+          // Gaps of 0.4 s or more are the tab being away, not slow drawing.
+          if (now - previous < 400) gaps.push(now - previous);
+          if (gaps.length >= 10) {
+            const typical = [...gaps].sort((a, b) => a - b)[5];
+            gaps.length = 0;
+            if (!lowered && typical > 45) {
+              sauce?.lower();
+              lowered = true;
+            } else if (lowered && typical > 90) {
+              skip();
+              return;
+            }
+          }
+        }
+        previous = now;
+
         if (now - start < END) frame = requestAnimationFrame(loop);
       };
       frame = requestAnimationFrame((now) => {
@@ -174,7 +199,7 @@ export function IntroSplash() {
         {WINGS.map((wing) => (
           <div key={wing.id} className={`intro-wing intro-wing-${wing.id}`}>
             <div className="intro-layer">
-              <Image src={wing.src} alt="" width={wing.width} height={wing.height} unoptimized priority />
+              <Image src={wing.src} alt="" width={wing.width} height={wing.height} unoptimized preload />
             </div>
             <div className="intro-layer intro-layer-blur">
               <Image src={wing.src} alt="" width={wing.width} height={wing.height} unoptimized loading="eager" />

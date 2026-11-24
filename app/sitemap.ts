@@ -14,6 +14,7 @@ const ENTRIES: Record<PageKey, Entry> = {
   menu: { changeFrequency: "weekly", priority: 0.9 },
   contact: { changeFrequency: "yearly", priority: 0.7 },
   about: { changeFrequency: "yearly", priority: 0.6 },
+  privacy: { changeFrequency: "yearly", priority: 0.2 },
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {

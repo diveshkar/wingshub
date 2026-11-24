@@ -256,6 +256,7 @@ export const SeoFileSchema = z.object({
     menu: PageSeoSchema,
     about: PageSeoSchema,
     contact: PageSeoSchema,
+    privacy: PageSeoSchema,
   }),
 });
 
@@ -319,4 +320,12 @@ export const ContactPageFileSchema = z.object({
     privacyNote: z.string().nullable(),
   }),
   visit: SectionCopy,
+});
+
+export const PrivacyPageFileSchema = z.object({
+  _meta: DatasetMetaSchema,
+  hero: PageIntro,
+  sections: z
+    .array(z.object({ heading: text, paragraphs: z.array(text).min(1) }))
+    .min(1),
 });

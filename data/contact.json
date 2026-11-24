@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Email and phone number supplied by the owner. Mark as confirmed once the owner has checked them."
+    "status": "confirmed"
   },
   "email": "info@wingshub.ca",
   "phone": "+14166663760"

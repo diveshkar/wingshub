@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Real menu transcribed from the supplied menu PDF (Classic Mojito.pdf), with obvious typos corrected. Proofread names, descriptions and prices against the printed menu, then mark as confirmed. Items without an image show a branded placeholder."
+    "status": "confirmed"
   },
   "items": [
     {

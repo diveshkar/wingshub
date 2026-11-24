@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Draft FAQs built from the supplied menu and address and the owner's answers. They also feed the FAQPage structured data. Answers that repeat the opening hours, phone number or tax rule must be updated if those change."
+    "status": "confirmed"
   },
   "faqs": [
     {

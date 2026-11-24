@@ -8,6 +8,7 @@ export const PAGE_PATHS: Record<PageKey, string> = {
   menu: "/menu",
   about: "/about",
   contact: "/contact",
+  privacy: "/privacy",
 };
 
 /** Shared Open Graph image, generated at build time by app/opengraph-image.tsx. */

@@ -2,12 +2,9 @@ import { Fragment } from "react";
 import type { CSSProperties } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { SauceDrip } from "@/components/story/sauce-drip";
 import { StoryController } from "@/components/story/story-controller";
-import { StaticPhoto } from "@/components/story/static-photo";
-import { STORY_PHOTOS } from "@/components/story/story-photos";
 import { StoryStage } from "@/components/story/story-stage";
-import { getPageContent, getPrimaryLocation, getRestaurant } from "@/lib/data";
+import { getPageContent, getPrimaryLocation } from "@/lib/data";
 import { cn } from "@/lib/utils/cn";
 import { hasAddress } from "@/lib/utils/format";
 
@@ -20,9 +17,8 @@ const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
  * made. See app/story.css for the layout and components/story for the pieces.
  */
 export async function Hero() {
-  const [{ hero, story }, restaurant, location] = await Promise.all([
+  const [{ hero, story }, location] = await Promise.all([
     getPageContent("home"),
-    getRestaurant(),
     getPrimaryLocation(),
   ]);
 
@@ -35,7 +31,7 @@ export async function Hero() {
       data-story
       data-intro="wait"
       data-step="-1"
-      className="relative isolate overflow-x-clip bg-ink-900 text-bone-50"
+      className="relative isolate overflow-clip bg-ink-900 text-bone-50"
     >
       <div aria-hidden="true" className="hero-backdrop pointer-events-none absolute inset-0 -z-10" />
 
@@ -84,12 +80,12 @@ export async function Hero() {
         </div>
 
         <div className="story-sticky">
-          <StoryStage image={restaurant.media.hero} />
+          <StoryStage />
         </div>
 
         <div className="story-track" data-story-track>
           <div className="story-captions" data-story-captions>
-            {story.steps.map((step, index) => (
+            {story.steps.map((step) => (
               <div key={step.title} className="story-caption">
                 <span aria-hidden="true" className="mb-4 block h-1 w-12 bg-flame-500" />
                 <h2 className="font-display text-[clamp(1.9rem,1.1rem+3.2vw,3.4rem)] font-black uppercase leading-[1.02]">
@@ -98,17 +94,12 @@ export async function Hero() {
                 <p className="mt-4 max-w-md font-serif text-lg leading-relaxed text-ink-300 sm:text-xl">
                   {step.text}
                 </p>
-                {/* Hidden while the plate animates; shown for visitors who get no animation. */}
-                <figure className="story-figure">
-                  <StaticPhoto photo={STORY_PHOTOS[index]} />
-                </figure>
               </div>
             ))}
           </div>
         </div>
       </Container>
 
-      <SauceDrip />
       <StoryController />
     </section>
   );

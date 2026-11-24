@@ -1,7 +1,6 @@
 {
   "_meta": {
-    "status": "draft",
-    "note": "Address supplied by the owner. The province (ON) comes from the postal code M1X. Optionally add geo coordinates and a Google Maps link (mapsUrl) for better local SEO, then mark as confirmed. Add more entries here for additional locations."
+    "status": "confirmed"
   },
   "locations": [
     {
