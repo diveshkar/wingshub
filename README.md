@@ -1,7 +1,8 @@
 # Wings Hub website
 
 Static-first marketing site for Wings Hub, a restaurant brand serving customers in Canada.
-Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4, hosted on Netlify.
+Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4, exported as plain static files and
+hosted on Cloudflare Pages.
 
 All business content lives in JSON files under `/data`, behind a small data-access layer, so the
 site can later move to a CMS, API or database without rebuilding the front end.
@@ -42,7 +43,8 @@ lib/
   utils/              Formatting helpers
 types/                Domain types (inferred from the Zod schemas)
 public/images/        Photos and brand assets (brand, hero, menu, about)
-public/__forms.html   Static form definition Netlify needs to detect the contact form
+public/_headers       Security and cache headers (Cloudflare Pages reads this file)
+public/_redirects     Rewrites that let page-to-page navigation find the exported page data
 ```
 
 ## Managing content
@@ -73,7 +75,7 @@ Each data file has a `_meta.status` of `"draft"` or `"confirmed"`.
 
 - **Draft mode** (the default when `NEXT_PUBLIC_CONTENT_STATUS` is not set, so local development): a banner
   is shown, pages are `noindex`, and `robots.txt` disallows crawling.
-- **Live mode** (`NEXT_PUBLIC_CONTENT_STATUS=live`, set in `netlify.toml` for the Netlify build): no banner,
+- **Live mode** (`NEXT_PUBLIC_CONTENT_STATUS=live`, set as a build variable in Cloudflare Pages): no banner,
   pages are indexable, and `robots.txt` and the sitemap are published. The build fails in live mode while any
   data file is still `"draft"`.
 - All data files are now `"confirmed"`. When you add a new data file or change content that the owner has not
@@ -122,7 +124,8 @@ count shown on the site ("40 flavours") is calculated from the list.
    shows featured items that have a photo.
 
 Suggested sizes: menu photos 1200 x 900 (4:3), hero 1600 x 2000 (4:5), about 1200 x 1500 (4:5).
-Next.js resizes and converts them to AVIF/WebP automatically. Write alt text that describes what
+A static site has no image server, so photos are served exactly as they are: shrink them before you add them
+(menu photos about 900 px wide, JPEG quality around 78, which gives 40 to 100 KB each). Write alt text that describes what
 is actually in the photo.
 
 Ten of the supplied photos had thin stray lines (1 to 8 px) along one edge, which showed up inside
@@ -251,21 +254,60 @@ and extend the data source.
 - `llms.txt`: a plain-text summary for AI assistants, built from the same data.
 - Semantic HTML, one `h1` per page, skip link, `en-CA` language, keyboard-friendly navigation,
   reduced-motion support.
-- Performance: fully prerendered pages, self-hosted fonts, responsive optimized images with
-  reserved space (no layout shift), almost no client JavaScript.
+- Performance: fully prerendered pages, self-hosted fonts, pre-shrunk images with reserved space (no
+  layout shift) and lazy loading, almost no client JavaScript.
 
 To strengthen local SEO: add the phone number, opening hours, coordinates and Google Maps link, and
 keep the name, address and phone identical to the Google Business Profile.
 
-## Deploying to Netlify
+## Deploying to Cloudflare Pages
 
-1. Push the repository to GitHub and import it in Netlify. The build settings are detected
-   automatically (`netlify.toml` only pins the Node version).
-2. Add the domain `wingshub.ca` and choose whether `www` redirects to it.
-3. `netlify.toml` already sets `NEXT_PUBLIC_CONTENT_STATUS=live`. Other variables from `.env.example` are optional.
-4. **Contact form:** Netlify Forms is wired through `public/__forms.html`. After the first deploy,
-   open Forms in the Netlify dashboard, confirm a form named `contact` exists, and add an email
-   notification to `info@wingshub.ca`. The form only works on Netlify, not in local development.
+The site is built with `output: "export"`: `npm run build` writes plain files to the `out` folder, and Cloudflare
+Pages serves that folder. There is no database, and the only code that runs on a server is the contact form's
+Function (`functions/api/contact.ts`, see below).
+
+Because it is a static export, three things differ from a normal Next.js app (see `next.config.ts`):
+Cache Components is off, `next/image` does not resize (photos are shrunk by hand), and the security headers live in
+`public/_headers` instead of `next.config.ts`. The four special files (`robots.ts`, `sitemap.ts`,
+`llms.txt/route.ts`, `opengraph-image.tsx`) carry `export const dynamic = "force-static"` for the same reason.
+
+1. Push the repository to GitHub. In Cloudflare: Workers & Pages > Create > Pages > Connect to Git, and pick it.
+2. Build settings: framework preset **None**, build command `npm run build`, build output directory `out`.
+3. Variables (Settings > Variables and secrets, for Production). The first group is read when the site is built, the
+   second by the contact Function when a message arrives. Mark the keys as **Secret**.
+
+   | Variable | Value |
+   | --- | --- |
+   | `NODE_VERSION` | `22` |
+   | `NEXT_PUBLIC_CONTENT_STATUS` | `live` (without it the site is built in draft mode: banner, noindex, crawling blocked) |
+   | `NEXT_PUBLIC_SITE_URL` | `https://wingshub.ca` |
+   | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | public key of the Turnstile check (optional, see below) |
+   | `BREVO_API_KEY` | **secret**, an API key from Brevo (SMTP & API > API keys) |
+   | `TURNSTILE_SECRET_KEY` | **secret**, the matching Turnstile secret key (set together with the site key, or neither) |
+   | `CONTACT_TO` | who receives the messages (default `info@wingshub.ca`) |
+   | `CONTACT_FROM_EMAIL` | sender address, a verified sender in Brevo (default `info@wingshub.ca`) |
+   | `CONTACT_FROM_NAME` | sender name in the inbox (default `Wings Hub website`) |
+   | `ALLOWED_ORIGINS` | addresses the form may be sent from (default `https://wingshub.ca,https://www.wingshub.ca`; add the `*.pages.dev` address while testing) |
+
+4. Custom domain: Pages project > Custom domains > Set up a domain > `wingshub.ca`. Cloudflare Pages needs the
+   domain's DNS on Cloudflare, so the nameservers at GoDaddy are changed to the two Cloudflare gives you. **Before
+   that, make sure every mail record (MX, TXT/SPF, autodiscover, selector1/selector2 DKIM and the other CNAMEs of the
+   email service) exists in Cloudflare with the orange cloud off ("DNS only"), or email stops.** `www` is
+   redirected to `wingshub.ca` with a Redirect Rule.
+5. **Contact form:** the page posts JSON to `/api/contact`, a Cloudflare Pages Function. It checks the message again,
+   verifies the Turnstile token (when Turnstile is set up) and sends one plain-text email with the Brevo API. In
+   Brevo: create an account, add and verify the sender address (Senders, domains & dedicated IPs > Senders), create an
+   API key, and, so the mail is not treated as spam, authenticate the domain `wingshub.ca` (Brevo gives a TXT record
+   and two DKIM CNAMEs to add in Cloudflare DNS). If Brevo answers 401 "unrecognised IP address", switch off
+   Authorized IPs under Security, because Cloudflare's addresses change. The Function lives in the same repository:
+   do not move the `functions` folder. Locally the form shows its error message (there is no Function in
+   `npm run dev`); test it on the deployed site or with `npx wrangler pages dev out`.
+6. Local check of the static build: `npm run build`, then serve the `out` folder with any static server.
+7. After every new page that is not the home page, add a line for it to `public/_redirects` (copy an existing one).
+8. **Turnstile (optional but recommended):** in Cloudflare > Turnstile > Add widget, add the hostname `wingshub.ca`,
+   mode Managed. Put the site key in `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and the secret key in `TURNSTILE_SECRET_KEY`,
+   then deploy again (the site key is read at build time). Cloudflare's test keys (`1x00000000000000000000AA` and
+   `1x0000000000000000000000000000000AA`) always pass and are handy for trying it out.
 
 ### Launch checklist
 
@@ -274,7 +316,7 @@ Done:
 - [x] Address, phone, opening hours (3 p.m. to midnight, all seven days), menu, flavours, logo and photos
 - [x] Brand name "Wings Hub" (two words; the domain and email stay `wingshub.ca`)
 - [x] Privacy policy page (`/privacy`, copy in `data/pages/privacy.json`), linked from the footer
-- [x] Every data file marked `"confirmed"`; `NEXT_PUBLIC_CONTENT_STATUS=live` in `netlify.toml`
+- [x] Every data file marked `"confirmed"`; `NEXT_PUBLIC_CONTENT_STATUS=live` set as a Cloudflare build variable
 
 Still open (the site works without them, but they should be dealt with):
 
@@ -284,17 +326,17 @@ Still open (the site works without them, but they should be dealt with):
 - [ ] Photos for the menu items that still show no picture
 - [ ] The four photos in `public/images/story/` (and the two wings and backdrop in `public/images/intro/`, cut from a supplied picture) look like stock pictures. Confirm they may be used commercially, or replace them with licensed or original images (the restaurant's own kitchen photos are best)
 - [ ] The four captions in `home.json` (`story.steps`): "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from"
-- [ ] After the first deploy: confirm the `contact` form appears in Netlify, add the email notification to `info@wingshub.ca`, and submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
+- [ ] After the first deploy: send a test message through the contact form, confirm it reaches `info@wingshub.ca` (check spam), and submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
 
 ## Security
 
 The site is static: there is no database, no login, no admin area and no API of our own, so there are no
 passwords or secrets to protect. The only variables are `NEXT_PUBLIC_SITE_URL` and
 `NEXT_PUBLIC_CONTENT_STATUS`, which are public on purpose. Never put a real secret in a `NEXT_PUBLIC_`
-variable (it is copied into the code every visitor downloads); keep real secrets in the Netlify dashboard and
+variable (it is copied into the code every visitor downloads); keep real secrets in the Cloudflare dashboard and
 never in the repository. `.env*` files (except `.env.example`) are git-ignored.
 
-- **Headers** (`next.config.ts`): Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options,
+- **Headers** (`public/_headers`): Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options,
   X-Frame-Options, Referrer-Policy, Cross-Origin-Opener-Policy and Permissions-Policy on every route. The CSP only
   allows this site's own scripts, styles, fonts, images and requests, plus the Google Map frame. It has to allow
   inline scripts, because Next.js adds some to every page and prebuilt pages cannot use per-request nonces.
@@ -302,19 +344,24 @@ never in the repository. `.env*` files (except `.env.example`) are git-ignored.
   policy or the browser will block it.
 - **No CORS headers** are sent, so other websites cannot read responses from this site in a browser.
 - **No source maps** are published, and the `X-Powered-By` header is off.
-- **Contact form** (`components/contact/contact-form.tsx`): React escapes everything that is shown, the fields
-  have length limits (checked in the browser and again before sending), only the four known fields are sent, a
-  hidden field catches simple bots (nothing is sent when it is filled), and a second send within 5 seconds is
-  ignored. Netlify Forms adds its own spam filter and the honeypot check on its side. For more protection turn on
-  reCAPTCHA for the form in the Netlify dashboard.
+- **Contact form** (`components/contact/contact-form.tsx` and `functions/api/contact.ts`): React escapes everything
+  that is shown. The Function only accepts a JSON POST from the site's own address (`ALLOWED_ORIGINS`), checks every
+  field again (type, length, control characters, a real email address, only digits and + ( ) - . in the phone),
+  refuses a body over 16 000 characters, ignores any extra field (the visitor cannot choose the recipient, the sender
+  or the subject), and puts the visitor's text only in the body of the email. A hidden field catches simple bots,
+  Cloudflare Turnstile (free, usually invisible) proves the sender is a person, and the browser ignores a second
+  send within 5 seconds. Error answers never contain keys or provider details. The API key and the Turnstile
+  secret are Cloudflare secrets, never in the repository. The only outside addresses the page may use are
+  `challenges.cloudflare.com` (Turnstile) and Google Maps (`public/_headers`).
 - **Data links** (`lib/data/schemas.ts`): links in the data files must be a path on this site, an anchor, an
   https address, an email link or a phone link. `javascript:` and `data:` links fail the build.
-- **Rate limiting** is done by Netlify (its network absorbs floods of requests, and Netlify Forms limits and
-  filters submissions). The site has no endpoint of its own that could be hammered.
+- **Rate limiting:** Cloudflare absorbs floods of ordinary requests. For the form, add one rate limiting rule in
+  Cloudflare (Security > WAF > Rate limiting rules): URI path equals `/api/contact`, 5 requests per 10 seconds, action
+  Block. Together with Turnstile this keeps the Brevo allowance (300 emails a day on the free plan) safe.
 - **Dependencies:** run `npm audit` now and then and update with `npm update`. Major version jumps (ESLint,
   TypeScript, `@types/node`) are deliberately left alone until they are tested.
 - **Accounts:** the real risk for a site like this is someone taking over an account, not the code. Turn on
-  two-step sign-in for GitHub, Netlify and GoDaddy, and keep the GitHub repository private if you do not want
+  two-step sign-in for GitHub, Cloudflare, Brevo and GoDaddy, and keep the GitHub repository private if you do not want
   the history (commit author email, old stock-photo files) to be public.
 
 ## Design tokens

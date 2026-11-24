@@ -11,8 +11,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/__forms.html"],
     },
     sitemap: absoluteUrl("/sitemap.xml"),
   };
 }
+
+/** Required by `output: "export"` (see next.config.ts): this file is written once, at build time. */
+export const dynamic = "force-static";

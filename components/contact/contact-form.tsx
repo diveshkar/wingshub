@@ -1,16 +1,17 @@
 "use client";
 
 import { CircleCheck, LoaderCircle } from "lucide-react";
-import { useId, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 type ContactFormProps = {
-  /** Must match the static form declared in public/__forms.html. */
-  formName: string;
+  /** Where the message is posted: the site's own Cloudflare Function (functions/api/contact.ts). */
   endpoint: string;
+  /** The public key of the Cloudflare Turnstile check. Empty means the check is switched off. */
+  turnstileSiteKey: string;
   fallbackEmail: string;
   copy: {
     title: string;
@@ -82,12 +83,95 @@ function Field({ label, name, type = "text", autoComplete, required, rows, maxLe
   );
 }
 
+type TurnstileApi = {
+  render: (
+    element: HTMLElement,
+    options: {
+      sitekey: string;
+      callback: (token: string) => void;
+      "expired-callback": () => void;
+      "error-callback": () => void;
+    },
+  ) => string;
+  remove: (widgetId: string) => void;
+  reset: (widgetId: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
+const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
 /**
- * Posts to the static form declared in public/__forms.html, which is how Netlify Forms
- * picks up submissions from a Next.js app. Nothing is sent anywhere until deployed on Netlify.
+ * Cloudflare Turnstile: a free, usually invisible check that the visitor is a person. It hands back a token
+ * that the Function verifies on the server. The token works once, so the parent replaces this component
+ * (by changing its key) after every send.
  */
-export function ContactForm({ formName, endpoint, fallbackEmail, copy }: ContactFormProps) {
+function Turnstile({ siteKey, onToken }: { siteKey: string; onToken: (token: string) => void }) {
+  const box = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = box.current;
+    if (!element) return;
+    let widgetId: string | undefined;
+    let stopped = false;
+    let retry: number | undefined;
+
+    const draw = () => {
+      if (stopped || widgetId || !window.turnstile) return;
+      widgetId = window.turnstile.render(element, {
+        sitekey: siteKey,
+        callback: onToken,
+        "expired-callback": () => onToken(""),
+        // The check could not run (for example the connection dropped). Try again in a few seconds,
+        // so the visitor is not left waiting for a token that will never come.
+        "error-callback": () => {
+          onToken("");
+          window.clearTimeout(retry);
+          retry = window.setTimeout(() => {
+            if (!stopped && widgetId) window.turnstile?.reset(widgetId);
+          }, 4000);
+        },
+      });
+    };
+
+    let script = document.querySelector<HTMLScriptElement>("script[data-turnstile]");
+    if (window.turnstile) {
+      draw();
+    } else {
+      if (!script) {
+        script = document.createElement("script");
+        script.src = TURNSTILE_SRC;
+        script.async = true;
+        script.dataset.turnstile = "true";
+        document.head.appendChild(script);
+      }
+      script.addEventListener("load", draw);
+    }
+
+    return () => {
+      stopped = true;
+      window.clearTimeout(retry);
+      script?.removeEventListener("load", draw);
+      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
+    };
+  }, [siteKey, onToken]);
+
+  return <div ref={box} />;
+}
+
+/**
+ * Sends the message to the site's own Cloudflare Function, which checks it again and emails it to the
+ * restaurant (see functions/api/contact.ts). Nothing is sent to anyone else.
+ */
+export function ContactForm({ endpoint, turnstileSiteKey, fallbackEmail, copy }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
+  const [problem, setProblem] = useState<"send" | "check">("send");
+  const [token, setToken] = useState("");
+  const [challenge, setChallenge] = useState(0);
   const lastSent = useRef(0);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -104,26 +188,47 @@ export function ContactForm({ formName, endpoint, fallbackEmail, copy }: Contact
       return;
     }
 
+    if (!endpoint) {
+      setProblem("send");
+      setStatus("error");
+      return;
+    }
+
+    // The security check has not finished yet: ask the visitor to wait a moment. The check is also started
+    // again, in case the first one never got going (a connection that dropped, for example).
+    if (turnstileSiteKey && !token) {
+      setProblem("check");
+      setStatus("error");
+      setChallenge((count) => count + 1);
+      return;
+    }
+
     // Plain text only, trimmed and cut to the same limits the fields have.
-    const body = new URLSearchParams({ "form-name": formName });
+    const message: Record<string, string> = {};
     for (const [key, value] of data.entries()) {
       if (typeof value !== "string" || !(key in LIMITS)) continue;
-      body.append(key, value.trim().slice(0, LIMITS[key]));
+      message[key] = value.trim().slice(0, LIMITS[key]);
     }
+    if (turnstileSiteKey) message.turnstileToken = token;
     lastSent.current = Date.now();
 
     setStatus("submitting");
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: body.toString(),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(message),
       });
       if (!response.ok) throw new Error(`Form submission failed (${response.status})`);
       form.reset();
       setStatus("success");
     } catch {
+      setProblem("send");
       setStatus("error");
+    } finally {
+      // The token can only be used once: get a fresh check ready for the next try.
+      setToken("");
+      setChallenge((count) => count + 1);
     }
   }
 
@@ -160,16 +265,24 @@ export function ContactForm({ formName, endpoint, fallbackEmail, copy }: Contact
           </label>
         </p>
 
+        {turnstileSiteKey && <Turnstile key={challenge} siteKey={turnstileSiteKey} onToken={setToken} />}
+
         {status === "error" && (
           <p
             role="alert"
             className="rounded-md bg-flame-500/10 px-4 py-3 text-sm font-medium text-ember-600"
           >
-            Something went wrong sending your message. Please try again, or email us directly at{" "}
-            <a href={`mailto:${fallbackEmail}`} className="underline underline-offset-4">
-              {fallbackEmail}
-            </a>
-            .
+            {problem === "check" ? (
+              "Please wait a moment for the security check to finish, then send your message again."
+            ) : (
+              <>
+                Something went wrong sending your message. Please try again, or email us directly at{" "}
+                <a href={`mailto:${fallbackEmail}`} className="underline underline-offset-4">
+                  {fallbackEmail}
+                </a>
+                .
+              </>
+            )}
           </p>
         )}
 

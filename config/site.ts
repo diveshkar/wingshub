@@ -20,8 +20,15 @@ export const siteConfig = {
   isLive: process.env.NEXT_PUBLIC_CONTENT_STATUS === "live",
   /** Injected by next.config.ts at build time. */
   copyrightYear: process.env.NEXT_PUBLIC_BUILD_YEAR ?? "",
-  /** Netlify Forms: see public/__forms.html */
-  contactForm: { name: "contact", endpoint: "/__forms.html" },
+  /**
+   * The contact form is posted to the site's own Cloudflare Function (functions/api/contact.ts), which emails
+   * it. turnstileSiteKey is the public key of the optional Cloudflare Turnstile check; leave it out to switch
+   * the check off (the Function must then not have TURNSTILE_SECRET_KEY set either).
+   */
+  contactForm: {
+    endpoint: "/api/contact",
+    turnstileSiteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "",
+  },
 } as const;
 
 export function absoluteUrl(path = "/"): string {

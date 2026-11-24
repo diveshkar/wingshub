@@ -78,3 +78,6 @@ export async function GET() {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }
+
+/** Required by `output: "export"` (see next.config.ts): this file is written once, at build time. */
+export const dynamic = "force-static";

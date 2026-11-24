@@ -31,8 +31,8 @@ export default async function ContactPage() {
         <Container className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-16">
           <div className="order-2 lg:order-1">
             <ContactForm
-              formName={siteConfig.contactForm.name}
               endpoint={siteConfig.contactForm.endpoint}
+              turnstileSiteKey={siteConfig.contactForm.turnstileSiteKey}
               fallbackEmail={contact.email}
               copy={content.form}
             />

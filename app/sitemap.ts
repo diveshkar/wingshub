@@ -23,3 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ENTRIES[page],
   }));
 }
+
+/** Required by `output: "export"` (see next.config.ts): this file is written once, at build time. */
+export const dynamic = "force-static";

@@ -1,0 +1,7 @@
+# Next.js asks for each page's data under a dotted file name, but the static export writes it into a folder
+# of the same name. These rewrites (status 200, the address in the browser does not change) connect the two,
+# so moving between pages does not need a full reload. Add a line for every new page that is not the home page.
+/menu/__next.menu.__PAGE__.txt /menu/__next.menu/__PAGE__.txt 200
+/about/__next.about.__PAGE__.txt /about/__next.about/__PAGE__.txt 200
+/contact/__next.contact.__PAGE__.txt /contact/__next.contact/__PAGE__.txt 200
+/privacy/__next.privacy.__PAGE__.txt /privacy/__next.privacy/__PAGE__.txt 200

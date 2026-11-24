@@ -123,3 +123,6 @@ export default function OpengraphImage() {
     },
   );
 }
+
+/** Required by `output: "export"` (see next.config.ts): this file is written once, at build time. */
+export const dynamic = "force-static";

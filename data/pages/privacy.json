@@ -22,7 +22,7 @@
     {
       "heading": "Who handles it",
       "paragraphs": [
-        "The contact form is hosted by Netlify, our website host. Netlify stores the message and passes it on to us by email."
+        "The contact form is handled by our website host, Cloudflare, which also runs a security check to stop automated spam. The message is then emailed to us through the email service Brevo."
       ]
     },
     {
