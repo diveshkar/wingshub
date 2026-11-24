@@ -1,7 +1,7 @@
 "use client";
 
 import { CircleCheck, LoaderCircle } from "lucide-react";
-import { useId, useState, type FormEvent } from "react";
+import { useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 
@@ -22,6 +22,9 @@ type ContactFormProps = {
   };
 };
 
+/** Longest value each field may have. Fields that are not listed here are not sent. */
+const LIMITS: Record<string, number> = { name: 100, email: 254, phone: 30, message: 5000 };
+
 const card = "rounded-xl border border-ink-900/10 bg-bone-50 p-6 sm:p-8";
 
 const controlStyles =
@@ -34,9 +37,14 @@ type FieldProps = {
   autoComplete?: string;
   required?: boolean;
   rows?: number;
+  /** The most characters the field accepts. Enforced here and again before sending. */
+  maxLength: number;
 };
 
-function Field({ label, name, type = "text", autoComplete, required, rows }: FieldProps) {
+/** Five seconds of grace after a send, so a double click or a script cannot post the form twice. */
+const MIN_GAP_MS = 5000;
+
+function Field({ label, name, type = "text", autoComplete, required, rows, maxLength }: FieldProps) {
   const id = useId();
 
   return (
@@ -56,6 +64,7 @@ function Field({ label, name, type = "text", autoComplete, required, rows }: Fie
           name={name}
           rows={rows}
           required={required}
+          maxLength={maxLength}
           className={cn(controlStyles, "min-h-36 resize-y py-3")}
         />
       ) : (
@@ -65,6 +74,7 @@ function Field({ label, name, type = "text", autoComplete, required, rows }: Fie
           type={type}
           required={required}
           autoComplete={autoComplete}
+          maxLength={maxLength}
           className={cn(controlStyles, "h-12")}
         />
       )}
@@ -78,15 +88,29 @@ function Field({ label, name, type = "text", autoComplete, required, rows }: Fie
  */
 export function ContactForm({ formName, endpoint, fallbackEmail, copy }: ContactFormProps) {
   const [status, setStatus] = useState<Status>("idle");
+  const lastSent = useRef(0);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
+    if (status === "submitting" || Date.now() - lastSent.current < MIN_GAP_MS) return;
 
+    const data = new FormData(form);
+    // Real visitors never see the hidden field. If it has anything in it, a script filled it in:
+    // pretend it worked and send nothing.
+    if (String(data.get("bot-field") ?? "").trim() !== "") {
+      form.reset();
+      setStatus("success");
+      return;
+    }
+
+    // Plain text only, trimmed and cut to the same limits the fields have.
     const body = new URLSearchParams({ "form-name": formName });
-    new FormData(form).forEach((value, key) => {
-      if (typeof value === "string") body.append(key, value);
-    });
+    for (const [key, value] of data.entries()) {
+      if (typeof value !== "string" || !(key in LIMITS)) continue;
+      body.append(key, value.trim().slice(0, LIMITS[key]));
+    }
+    lastSent.current = Date.now();
 
     setStatus("submitting");
     try {
@@ -123,11 +147,11 @@ export function ContactForm({ formName, endpoint, fallbackEmail, copy }: Contact
 
       <form onSubmit={handleSubmit} className="mt-6 grid gap-5">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Name" name="name" autoComplete="name" required />
-          <Field label="Email" name="email" type="email" autoComplete="email" required />
+          <Field label="Name" name="name" autoComplete="name" maxLength={LIMITS.name} required />
+          <Field label="Email" name="email" type="email" autoComplete="email" maxLength={LIMITS.email} required />
         </div>
-        <Field label="Phone (optional)" name="phone" type="tel" autoComplete="tel" />
-        <Field label="Message" name="message" rows={5} required />
+        <Field label="Phone (optional)" name="phone" type="tel" autoComplete="tel" maxLength={LIMITS.phone} />
+        <Field label="Message" name="message" rows={5} maxLength={LIMITS.message} required />
 
         <p className="hidden" aria-hidden="true">
           <label>

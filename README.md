@@ -278,6 +278,37 @@ Still open (the site works without them, but they should be dealt with):
 - [ ] The four captions in `home.json` (`story.steps`): "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from". Only the dusting photo is shown, so the second to fourth captions have no matching photo
 - [ ] After the first deploy: confirm the `contact` form appears in Netlify, add the email notification to `info@wingshub.ca`, and submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
 
+## Security
+
+The site is static: there is no database, no login, no admin area and no API of our own, so there are no
+passwords or secrets to protect. The only variables are `NEXT_PUBLIC_SITE_URL` and
+`NEXT_PUBLIC_CONTENT_STATUS`, which are public on purpose. Never put a real secret in a `NEXT_PUBLIC_`
+variable (it is copied into the code every visitor downloads); keep real secrets in the Netlify dashboard and
+never in the repository. `.env*` files (except `.env.example`) are git-ignored.
+
+- **Headers** (`next.config.ts`): Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options,
+  X-Frame-Options, Referrer-Policy, Cross-Origin-Opener-Policy and Permissions-Policy on every route. The CSP only
+  allows this site's own scripts, styles, fonts, images and requests, plus the Google Map frame. It has to allow
+  inline scripts, because Next.js adds some to every page and prebuilt pages cannot use per-request nonces.
+  If a new feature needs another outside service (analytics, a chat widget, a video), add its address to the
+  policy or the browser will block it.
+- **No CORS headers** are sent, so other websites cannot read responses from this site in a browser.
+- **No source maps** are published, and the `X-Powered-By` header is off.
+- **Contact form** (`components/contact/contact-form.tsx`): React escapes everything that is shown, the fields
+  have length limits (checked in the browser and again before sending), only the four known fields are sent, a
+  hidden field catches simple bots (nothing is sent when it is filled), and a second send within 5 seconds is
+  ignored. Netlify Forms adds its own spam filter and the honeypot check on its side. For more protection turn on
+  reCAPTCHA for the form in the Netlify dashboard.
+- **Data links** (`lib/data/schemas.ts`): links in the data files must be a path on this site, an anchor, an
+  https address, an email link or a phone link. `javascript:` and `data:` links fail the build.
+- **Rate limiting** is done by Netlify (its network absorbs floods of requests, and Netlify Forms limits and
+  filters submissions). The site has no endpoint of its own that could be hammered.
+- **Dependencies:** run `npm audit` now and then and update with `npm update`. Major version jumps (ESLint,
+  TypeScript, `@types/node`) are deliberately left alone until they are tested.
+- **Accounts:** the real risk for a site like this is someone taking over an account, not the code. Turn on
+  two-step sign-in for GitHub, Netlify and GoDaddy, and keep the GitHub repository private if you do not want
+  the history (commit author email, old stock-photo files) to be public.
+
 ## Design tokens
 
 Colours, fonts and radii are defined once in `app/globals.css` (`@theme`). The palette follows the

@@ -29,7 +29,18 @@ export const MediaImageSchema = z.object({
   height: z.number().int().positive().optional(),
 });
 
-const Cta = z.object({ label: text, href: text });
+/**
+ * Links that come from the data files may only be a path on this site, an in-page anchor, an https
+ * address, an email link or a phone link. This keeps "javascript:" and "data:" links out of the pages
+ * even if a data file is edited by mistake or later comes from a CMS.
+ */
+const href = text.refine(
+  (value) => /^(\/(?!\/)|#|https:\/\/|mailto:|tel:)/.test(value),
+  "Use a path starting with /, an anchor starting with #, or an https:// address",
+);
+const httpsUrl = z.url({ protocol: /^https$/ });
+
+const Cta = z.object({ label: text, href });
 const SectionCopy = z.object({ title: text, description: z.string().nullable() });
 const PageIntro = z.object({ title: text, intro: text });
 
@@ -57,11 +68,11 @@ export const RestaurantFileSchema = z.object({
     hero: MediaImageSchema.nullable(),
     about: MediaImageSchema.nullable(),
   }),
-  social: z.array(z.object({ platform: SocialPlatformSchema, url: z.url() })),
+  social: z.array(z.object({ platform: SocialPlatformSchema, url: httpsUrl })),
   /** For example "Cash" and "Card". Shown in the FAQ and published as `paymentAccepted`. */
   paymentMethods: z.array(text),
   /** Delivery and ordering platforms. A null url shows the name as plain text until the link is added. */
-  onlineOrdering: z.array(z.object({ name: text, url: z.url().nullable() })),
+  onlineOrdering: z.array(z.object({ name: text, url: httpsUrl.nullable() })),
   services: z.object({
     dineIn: z.boolean().nullable(),
     takeaway: z.boolean().nullable(),
@@ -98,7 +109,7 @@ const LocationSchema = z.object({
       longitude: z.number().min(-180).max(180),
     })
     .nullable(),
-  mapsUrl: z.url().nullable(),
+  mapsUrl: httpsUrl.nullable(),
 });
 
 export const LocationsFileSchema = z.object({
@@ -219,7 +230,7 @@ export const WingFlavoursFileSchema = z.object({
 /* Navigation, FAQ, SEO                                                */
 /* ------------------------------------------------------------------ */
 
-const NavLinkSchema = z.object({ label: text, href: text });
+const NavLinkSchema = z.object({ label: text, href });
 
 export const NavigationFileSchema = z.object({
   header: z.object({ links: z.array(NavLinkSchema), cta: NavLinkSchema }),
