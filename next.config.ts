@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   reactCompiler: true,
   poweredByHeader: false,
+  // Lets the development server be opened through an ngrok address. Without this, Next.js refuses the
+  // dev-only scripts for any host except localhost, so the page loads but nothing that needs JavaScript
+  // (the opening, the scroll story, the crumbs) works. It has no effect on the live site.
+  allowedDevOrigins: ["*.ngrok-free.app", "*.ngrok-free.dev", "*.ngrok.app", "*.ngrok.dev", "*.ngrok.io"],
   // Never ship source maps to visitors.
   productionBrowserSourceMaps: false,
   env: {

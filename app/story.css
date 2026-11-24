@@ -1,9 +1,9 @@
 /* =============================================================================
    The wing story (home page)
 
-   A wide black board with two wings on it stands up into a round plate that shows one kitchen photo (the
-   wings being dusted). The plate then stays with the visitor while the four captions go by. It starts after
-   the full-screen opening (see the end of this file). The plate part is plain CSS; the
+   A round plate shows the hero photo. The plate then stays with the visitor like a window that opens
+   onto the kitchen, one photo after another: the wings being dusted, cooked, tossed in sauce and bitten
+   into. It starts after the full-screen opening (see the end of this file). The plate part is plain CSS; the
    scroll part is driven by a handful of custom properties that StoryController writes onto the
    elements that use them. Every property has a resting value, so without JavaScript (or with reduced
    motion) the plate simply shows the finished dish.
@@ -75,6 +75,11 @@
     transition:
       opacity 0.45s ease 0.15s,
       translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+  }
+
+  /* Plain photos under the captions, for visitors who get no animation (see the end of this file). */
+  .story-figure {
+    display: none;
   }
 
   @media (min-width: 1024px) {
@@ -243,7 +248,7 @@
     pointer-events: none;
   }
 
-  /* ---- The scenes: what the round window shows ---- */
+  /* ---- The scenes: photos stacked in the window. Each one opens over the one before. ---- */
 
   .scene {
     position: absolute;
@@ -252,7 +257,7 @@
 
   /*
     0. The first screen: a black board with the two wings on it (.scene-board, which shows while --flat is
-    near 1) and the kitchen photo (.scene-plate), which fades in as the plate stands up. Everything that moves
+    near 1) and the hero photo (.scene-plate), which fades in as the plate stands up. Everything that moves
     here waits for the full-screen opening to finish: components/story/intro-splash.tsx sets data-intro="go"
     on the section at that moment ("done" for a visit with nothing to wait for, so the board is already set).
     Before that (and without JavaScript) the plate simply rests.
@@ -271,22 +276,94 @@
   }
 
   .scene-plate {
-    --dust: 1;
     opacity: clamp(0, calc((0.85 - var(--flat)) * 2.5), 1);
   }
 
-  /* The only photo: it slowly pushes in while the visitor scrolls (--dust goes from 0 to 1). */
-  .scene-plate img {
+  /* The kitchen photos fade in when they have loaded, so a slow connection never shows a blank. */
+  .scene-dust img,
+  .scene-cook img,
+  .scene-bite img,
+  .scene-eaten img {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .scene-dust img[data-loaded],
+  .scene-cook img[data-loaded],
+  .scene-bite img[data-loaded],
+  .scene-eaten img[data-loaded] {
+    opacity: 1;
+  }
+
+  /* 1. Dusting: opens like an iris from the sieve, then slowly pushes in. */
+  .scene-dust {
+    --t1: 0;
+    --dust: 0;
+    clip-path: circle(calc(var(--t1) * 88%) at 45% 40%);
+  }
+
+  .scene-dust img {
     transform-origin: 45% 40%;
     scale: calc(1.22 - var(--dust) * 0.16);
     translate: calc(var(--dust) * -1.2cqw) calc(var(--dust) * 0.8cqw);
+  }
+
+  /* 2. Cooking: fades in through steam while the basket rises into place. */
+  .scene-cook {
+    --t2: 0;
+    --cook: 0;
+    opacity: var(--t2);
+  }
+
+  .scene-cook img {
+    transform-origin: 48% 52%;
+    scale: calc(1.16 - var(--cook) * 0.1);
+    translate: 0 calc((1 - var(--t2)) * 7cqw - var(--cook) * 1.2cqw);
+    rotate: calc((1 - var(--t2)) * -2.5deg);
+  }
+
+  /* 4. Biting: waits underneath the toss until the first bite. */
+  .scene-bite {
+    --bite-vis: 0;
+    --bitek: 0;
+    opacity: var(--bite-vis);
+  }
+
+  .scene-bite img {
+    transform-origin: 58% 42%;
+    scale: calc(1.2 - var(--bitek) * 0.12);
+  }
+
+  /*
+    3. Tossing: arrives with a flash of sauce, rocks like a bowl being tossed, then is eaten away
+    (the bite mask is on .scene-eaten, set in components/story/bite-mask.ts).
+  */
+  .scene-toss {
+    --t3: 0;
+    --toss: 0;
+    --bite1: 0;
+    --bite2: 0;
+    --bite3: 0;
+    opacity: var(--t3);
+  }
+
+  .scene-eaten {
+    position: absolute;
+    inset: 0;
+  }
+
+  .scene-eaten img {
+    transform-origin: 56% 55%;
+    scale: calc(1.12 - var(--toss) * 0.05);
+    rotate: calc(sin(var(--toss) * 9.4) * 1.1deg);
+    translate: 0 calc(sin(var(--toss) * 12.5) * -0.8cqw);
   }
 
   [data-story]:not([data-intro="go"]) .rise-in {
     animation: none;
   }
 
-  /* ---- Spice laid over the photo ---- */
+  /* ---- Effects laid over the photos ---- */
 
   .story-fx {
     position: absolute;
@@ -295,9 +372,39 @@
     pointer-events: none;
   }
 
+  .story-veil {
+    position: absolute;
+    inset: 0;
+  }
+
   .fx-group {
     position: absolute;
     inset: 0;
+  }
+
+  /* A cloud of steam hides the change from dusting to cooking. */
+  .story-veil-steam {
+    --veil: 0;
+    background: radial-gradient(
+      circle at 50% 56%,
+      rgb(255 255 255 / 0.6),
+      rgb(255 255 255 / 0.16) 55%,
+      transparent 78%
+    );
+    opacity: calc(var(--veil) * 0.85);
+  }
+
+  /* A flash of sauce hides the change from cooking to tossing. */
+  .story-veil-sauce {
+    --flash: 0;
+    background: radial-gradient(
+      circle at 56% 56%,
+      rgb(255 150 60 / 0.9),
+      rgb(229 8 13 / 0.5) 48%,
+      transparent 78%
+    );
+    mix-blend-mode: screen;
+    opacity: var(--flash);
   }
 
   /* Spice falling from the sieve. */
@@ -316,6 +423,91 @@
     background: var(--tone);
     opacity: calc(var(--spice-a) * var(--o));
     translate: calc(sin(var(--spice) * 6.28 * var(--sway)) * 1.1cqw) 0;
+  }
+
+  /* Steam drifts up on its own, but only while its photo is showing. */
+  [data-scope="steam-cook"] {
+    --steam1: 0;
+  }
+
+  [data-scope="steam-bite"] {
+    --steam2: 0;
+  }
+
+  .wisp {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: calc(var(--w) * 1cqw);
+    height: calc(var(--h) * 1cqw);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.5), transparent);
+    filter: blur(0.7cqw);
+    opacity: 0;
+    animation: wisp-rise 5.5s ease-out var(--d) infinite;
+    animation-play-state: paused;
+  }
+
+  .wisp-cook {
+    --z: var(--steam1);
+  }
+
+  .wisp-bite {
+    --z: var(--steam2);
+  }
+
+  [data-step="1"] .wisp-cook,
+  [data-step="2"] .wisp-cook,
+  [data-step="3"] .wisp-bite {
+    animation-play-state: running;
+  }
+
+  /* Crumbs fall from each bite. --c is how far along that bite's crumbs are (0 to 1). */
+  [data-scope="crumbs-1"] {
+    --crumb1: 0;
+    --c: var(--crumb1);
+  }
+
+  [data-scope="crumbs-2"] {
+    --crumb2: 0;
+    --c: var(--crumb2);
+  }
+
+  [data-scope="crumbs-3"] {
+    --crumb3: 0;
+    --c: var(--crumb3);
+  }
+
+  .crumb {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: calc(var(--sz) * 1cqw);
+    height: calc(var(--sz) * 0.8cqw);
+    border-radius: 35% 60% 45% 55%;
+    background: var(--tone);
+    opacity: calc(clamp(0, var(--c) * 10, 1) * clamp(0, (1 - var(--c)) * 3, 1));
+    translate: calc(var(--dx) * var(--c) * 1cqw)
+      calc((var(--dy) * var(--c) + var(--g) * var(--c) * var(--c)) * 1cqw);
+    rotate: calc(var(--c) * var(--spin) * 1deg);
+  }
+
+  /* Sauce flung up around the mouth of the bowl as the wings are tossed. */
+  [data-scope="drops"] {
+    --splash: 0;
+  }
+
+  .drop {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: calc(var(--sz) * 1cqw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffd9a8, #ff7a2a 45%, #c4070c);
+    opacity: calc(clamp(0, var(--splash) * 10, 1) * clamp(0, (1 - var(--splash)) * 2.5, 1));
+    translate: calc(var(--dx) * var(--splash) * 1cqw)
+      calc((var(--up) * -1 * var(--splash) + var(--g) * var(--splash) * var(--splash)) * 1cqw);
   }
 
   /* ---- The first screen: two wings land on the board ---- */
@@ -693,6 +885,23 @@
   }
 }
 
+/* A wisp of steam grows, drifts up and fades. --z is how much steam this photo should show. */
+@keyframes wisp-rise {
+  0% {
+    translate: 0 0;
+    scale: 0.7;
+    opacity: 0;
+  }
+  20% {
+    opacity: calc(var(--z) * 0.8);
+  }
+  100% {
+    translate: calc(var(--drift) * 1cqw) calc(var(--rise) * -1cqw);
+    scale: 1.6;
+    opacity: 0;
+  }
+}
+
 @keyframes bite-grow {
   from {
     scale: 0;
@@ -702,8 +911,8 @@
   }
 }
 
-/* ---- Reduced motion, and no JavaScript: the finished round plate with its photo, and the captions as
-   plain text, so the whole story is still there without any movement ---- */
+/* ---- Reduced motion, and no JavaScript: show the tossing photo, and each caption with its own
+   plain photo underneath, so the whole story is still there without any movement ---- */
 
 @media (prefers-reduced-motion: reduce) {
   .story-plate,
@@ -754,6 +963,17 @@
     margin-bottom: 2.5rem;
     opacity: 1;
     translate: none;
+  }
+
+  .story-figure {
+    display: block;
+    width: min(100%, 15rem);
+    margin-top: 1.25rem;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.35rem #1b1b1e,
+      0 1rem 2rem -1rem rgb(0 0 0 / 0.8);
   }
 }
 
