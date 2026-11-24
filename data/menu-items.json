@@ -1,0 +1,1078 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Real menu transcribed from the supplied menu PDF (Classic Mojito.pdf), with obvious typos corrected. Proofread names, descriptions and prices against the printed menu, then mark as confirmed. Items without an image show a branded placeholder."
+  },
+  "items": [
+    {
+      "id": "item-bone-in-wings",
+      "slug": "bone-in-wings",
+      "categoryId": "cat-wings",
+      "name": "Bone-In Wings",
+      "description": "Lightly dusted bone-in wings, 8–9 pieces per pound, tossed in your choice of flavour.",
+      "prices": [
+        {
+          "label": "1 lb · 1 flavour",
+          "amount": 15
+        },
+        {
+          "label": "2 lb · 1 flavour",
+          "amount": 29
+        },
+        {
+          "label": "3 lb · 2 flavours",
+          "amount": 43
+        },
+        {
+          "label": "4 lb · 2 flavours",
+          "amount": 57
+        },
+        {
+          "label": "5 lb · 3 flavours",
+          "amount": 70
+        }
+      ],
+      "spiceLevel": null,
+      "featured": true,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/bone-in-wings.jpg",
+        "alt": "Glazed bone-in chicken wings on a slate board"
+      },
+      "sortOrder": 1
+    },
+    {
+      "id": "item-boneless-wings",
+      "slug": "boneless-wings",
+      "categoryId": "cat-wings",
+      "name": "Boneless Wings",
+      "description": "Boneless wings, 8–10 pieces per pound, tossed in your choice of flavour.",
+      "prices": [
+        {
+          "label": "1 lb · 1 flavour",
+          "amount": 15
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/boneless-wings.jpg",
+        "alt": "Boneless chicken wings drizzled with ranch and dusted with spice"
+      },
+      "sortOrder": 2
+    },
+    {
+      "id": "item-veggie-wings",
+      "slug": "veggie-wings",
+      "categoryId": "cat-wings",
+      "name": "Veggie Wings",
+      "description": "Veggie wings, 10–12 pieces per pound, tossed in your choice of flavour.",
+      "prices": [
+        {
+          "label": "1 lb · 1 flavour",
+          "amount": 16
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 3
+    },
+    {
+      "id": "item-hub-special",
+      "slug": "hub-special",
+      "categoryId": "cat-hub-exclusive",
+      "name": "Hub Special",
+      "description": "1 lb bone-in wings (1 flavour), a side of chili onion fries and a can of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 20
+        }
+      ],
+      "spiceLevel": null,
+      "featured": true,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/hub-special.jpg",
+        "alt": "Sauced chicken wings and a tray of loaded chili onion fries with a can of ginger ale"
+      },
+      "sortOrder": 1
+    },
+    {
+      "id": "item-couple-special",
+      "slug": "couple-special",
+      "categoryId": "cat-hub-exclusive",
+      "name": "Couple Special",
+      "description": "2 lb bone-in wings (2 flavours), a side of chili onion fries and 2 cans of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 38
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/couple-special.jpg",
+        "alt": "Saucy chicken wings and loaded chili onion fries with two cans of pop"
+      },
+      "sortOrder": 2
+    },
+    {
+      "id": "item-solo-blast",
+      "slug": "solo-blast",
+      "categoryId": "cat-bundles",
+      "name": "Solo Blast",
+      "description": "1 lb bone-in wings (1 flavour), a side of fries and a can of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/solo-blast.jpg",
+        "alt": "Sauced wings and loaded fries on a plate with a can of orange pop"
+      },
+      "sortOrder": 1
+    },
+    {
+      "id": "item-duo-madness",
+      "slug": "duo-madness",
+      "categoryId": "cat-bundles",
+      "name": "Duo Madness",
+      "description": "2 lb bone-in wings (2 flavours), a basket of fries and 2 cans of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 35
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/duo-madness.jpg",
+        "alt": "Plate of dusted chicken wings with a bowl of fries and two cans of pop"
+      },
+      "sortOrder": 2
+    },
+    {
+      "id": "item-triple-threat",
+      "slug": "triple-threat",
+      "categoryId": "cat-bundles",
+      "name": "Triple Threat",
+      "description": "3 lb bone-in wings (2 flavours), baskets of fries and 3 cans of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 53
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/triple-threat.jpg",
+        "alt": "Plates of fried wings, boneless wings and loaded fries with three cans of cola"
+      },
+      "sortOrder": 3
+    },
+    {
+      "id": "item-party-beast",
+      "slug": "party-beast",
+      "categoryId": "cat-bundles",
+      "name": "Party Beast",
+      "description": "5 lb bone-in wings (4 flavours), a basket of fries and 5 cans of pop.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 88
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/party-beast.jpg",
+        "alt": "Several plates of wings in different flavours with dips and spices"
+      },
+      "sortOrder": 4
+    },
+    {
+      "id": "item-birthday-treat",
+      "slug": "birthday-treat",
+      "categoryId": "cat-bundles",
+      "name": "Birthday Treat",
+      "description": "10 lb bone-in wings (5 flavours), baskets of chili onion fries and 5 classic mojitos.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 180
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 5
+    },
+    {
+      "id": "item-veg-wrap",
+      "slug": "veg-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Veg Wrap",
+      "description": "Lettuce, fries, tomatoes, onion, mixed cheese, ranch and Hub seasoning. Plant base +$3.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 12
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "item-chicken-wrap",
+      "slug": "chicken-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Chicken Wrap",
+      "description": "Chicken, lettuce, fries, tomatoes, onion, mixed cheese, ranch and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 14
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 2
+    },
+    {
+      "id": "item-spicy-chicken-wrap",
+      "slug": "spicy-chicken-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Spicy Chicken Wrap",
+      "description": "Chicken tossed in Hub spicy sauce, lettuce, fries, tomatoes, onion, chili, mixed cheese, ranch and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 15
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": true,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/spicy-chicken-wrap.jpg",
+        "alt": "Grilled wrap filled with crispy chicken, lettuce and onion"
+      },
+      "sortOrder": 3
+    },
+    {
+      "id": "item-prawns-wrap",
+      "slug": "prawns-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Prawns Wrap",
+      "description": "Popcorn prawn tossed in Hub spicy sauce, lettuce, fries, tomatoes, onion, mixed cheese, ranch and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 4
+    },
+    {
+      "id": "item-steak-wrap",
+      "slug": "steak-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Steak Wrap",
+      "description": "Steak strips tossed in Hub sauce, lettuce, fries, caesar, parmesan, mixed cheese, ranch and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 16
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 5
+    },
+    {
+      "id": "item-hubs-wrap",
+      "slug": "hubs-wrap",
+      "categoryId": "cat-wraps",
+      "name": "Hub's Wrap",
+      "description": "Spicy mutton roast, lettuce, fries, onion, chili, caesar, parmesan, mixed cheese, ranch and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 6
+    },
+    {
+      "id": "item-cheese-quesadilla",
+      "slug": "cheese-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Cheese Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 11
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "item-chicken-quesadilla",
+      "slug": "chicken-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Chicken Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 15
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/chicken-quesadilla.jpg",
+        "alt": "Chicken quesadilla wedges served with sour cream and salsa"
+      },
+      "sortOrder": 2
+    },
+    {
+      "id": "item-spicy-chicken-quesadilla",
+      "slug": "spicy-chicken-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Spicy Chicken Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 16
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/spicy-chicken-quesadilla.jpg",
+        "alt": "Spicy chicken quesadilla wedges with sour cream and hot sauce"
+      },
+      "sortOrder": 3
+    },
+    {
+      "id": "item-spicy-prawns-quesadilla",
+      "slug": "spicy-prawns-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Spicy Prawns Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 4
+    },
+    {
+      "id": "item-hub-special-quesadilla",
+      "slug": "hub-special-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Hub Special Quesadilla",
+      "description": "Chicken and prawns tossed in Hub sauce.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 20
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/hub-special-quesadilla.jpg",
+        "alt": "Quesadilla filled with chicken and prawns, served with a creamy dip"
+      },
+      "sortOrder": 5
+    },
+    {
+      "id": "item-steak-quesadilla",
+      "slug": "steak-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Steak Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 6
+    },
+    {
+      "id": "item-mutton-quesadilla",
+      "slug": "mutton-quesadilla",
+      "categoryId": "cat-quesadillas",
+      "name": "Mutton Quesadilla",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 7
+    },
+    {
+      "id": "item-onion-rings",
+      "slug": "onion-rings",
+      "categoryId": "cat-appetizers",
+      "name": "Onion Rings",
+      "description": "Coated with seasoned batter and deep fried until crisp.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "item-deep-fried-cauli-bites",
+      "slug": "deep-fried-cauli-bites",
+      "categoryId": "cat-appetizers",
+      "name": "Deep Fried Cauli-Bites",
+      "description": "Tossed in our signature flavour.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 2
+    },
+    {
+      "id": "item-nachos",
+      "slug": "nachos",
+      "categoryId": "cat-appetizers",
+      "name": "Nachos",
+      "description": "Corn chips topped with cheese, onion, tomato and jalapeno, served with sour cream. Add a protein: beef +$7, chicken +$6 or mutton +$7.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 17
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 3
+    },
+    {
+      "id": "item-chili-onion-rings",
+      "slug": "chili-onion-rings",
+      "categoryId": "cat-appetizers",
+      "name": "Chili Onion Rings",
+      "description": "Onion rings, ranch, onions, green chili and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 12
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/chili-onion-rings.jpg",
+        "alt": "Onion rings topped with ranch, red onion and green chili"
+      },
+      "sortOrder": 4
+    },
+    {
+      "id": "item-coconut-crusted-shrimp",
+      "slug": "coconut-crusted-shrimp",
+      "categoryId": "cat-appetizers",
+      "name": "Coconut Crusted Shrimp (6)",
+      "description": "Lightly battered crispy shrimp coated in breadcrumbs and sweetened coconut flakes.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/coconut-crusted-shrimp.jpg",
+        "alt": "Plate of coconut crusted shrimp with a dipping sauce"
+      },
+      "sortOrder": 5
+    },
+    {
+      "id": "item-calamari",
+      "slug": "calamari",
+      "categoryId": "cat-appetizers",
+      "name": "Calamari",
+      "description": "Hand cut and lightly battered crispy, deep-fried calamari with jalapeno and bell peppers.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 6
+    },
+    {
+      "id": "item-hot-butter-calamari",
+      "slug": "hot-butter-calamari",
+      "categoryId": "cat-appetizers",
+      "name": "Hot Butter Calamari",
+      "description": "Calamari tossed in butter with Hub's spices.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 18
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 7
+    },
+    {
+      "id": "item-corn-ribs",
+      "slug": "corn-ribs",
+      "categoryId": "cat-appetizers",
+      "name": "Corn Ribs",
+      "description": "Tossed in your choice of lemon pepper, parmesan or garlic cajun.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/corn-ribs.jpg",
+        "alt": "Seasoned corn ribs served with a ranch dip"
+      },
+      "sortOrder": 8
+    },
+    {
+      "id": "item-samosa-basket",
+      "slug": "samosa-basket",
+      "categoryId": "cat-appetizers",
+      "name": "Samosa Basket (15)",
+      "description": "Chicken, mutton, devilled chicken, pepper mutton, prawn and veg samosas in one basket.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 16
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 9
+    },
+    {
+      "id": "item-mozzarella-sticks",
+      "slug": "mozzarella-sticks",
+      "categoryId": "cat-appetizers",
+      "name": "Mozzarella Sticks",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 9
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/mozzarella-sticks.jpg",
+        "alt": "Golden mozzarella sticks with a dipping sauce"
+      },
+      "sortOrder": 10
+    },
+    {
+      "id": "item-jalapeno-cream-poppers",
+      "slug": "jalapeno-cream-poppers",
+      "categoryId": "cat-appetizers",
+      "name": "Jalapeno Cream Poppers",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 9
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 11
+    },
+    {
+      "id": "item-basket-of-fries",
+      "slug": "basket-of-fries",
+      "categoryId": "cat-fries",
+      "name": "Basket of Fries",
+      "description": "Seasoned crispy golden fries.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 8
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "item-basket-of-curly-fries",
+      "slug": "basket-of-curly-fries",
+      "categoryId": "cat-fries",
+      "name": "Basket of Curly Fries",
+      "description": "Crispy golden seasoned curly fries. Add chili onion or green chili +$2.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 2
+    },
+    {
+      "id": "item-mexican-fries",
+      "slug": "mexican-fries",
+      "categoryId": "cat-fries",
+      "name": "Mexican Fries",
+      "description": "Mixed cheese, tomato, jalapeno and onion.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 14
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 3
+    },
+    {
+      "id": "item-chili-onion-fries",
+      "slug": "chili-onion-fries",
+      "categoryId": "cat-fries",
+      "name": "Chili Onion Fries",
+      "description": "Ranch, onions, green chilies and Hub seasoning. Add curly fries +$2.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 12
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/chili-onion-fries.jpg",
+        "alt": "Bowl of chili onion fries topped with chopped red onion and green chili"
+      },
+      "sortOrder": 4
+    },
+    {
+      "id": "item-waffle-fries",
+      "slug": "waffle-fries",
+      "categoryId": "cat-fries",
+      "name": "Waffle Fries",
+      "description": "Crispy waffle-cut fries.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/waffle-fries.jpg",
+        "alt": "Bowl of crispy waffle-cut fries"
+      },
+      "sortOrder": 5
+    },
+    {
+      "id": "item-cheesy-chili-onion-fries",
+      "slug": "cheesy-chili-onion-fries",
+      "categoryId": "cat-fries",
+      "name": "Cheesy Chili Onion Fries",
+      "description": "Mixed cheese, ranch, onion, chili and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 13
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/cheesy-chili-onion-fries.jpg",
+        "alt": "Bowl of fries topped with melted cheese, ranch and seasoning"
+      },
+      "sortOrder": 6
+    },
+    {
+      "id": "item-sweet-potato-fries",
+      "slug": "sweet-potato-fries",
+      "categoryId": "cat-fries",
+      "name": "Sweet Potato Fries",
+      "description": "Sweet and crispy sweet potato fries.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 10
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/sweet-potato-fries.jpg",
+        "alt": "Crinkle-cut sweet potato fries on a slate board"
+      },
+      "sortOrder": 7
+    },
+    {
+      "id": "item-poutine",
+      "slug": "poutine",
+      "categoryId": "cat-fries",
+      "name": "Poutine",
+      "description": "Mixed cheese curds and gravy.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 12
+        }
+      ],
+      "spiceLevel": null,
+      "featured": true,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/poutine.jpg",
+        "alt": "Bowl of poutine with cheese curds and gravy"
+      },
+      "sortOrder": 8
+    },
+    {
+      "id": "item-poutine-hub",
+      "slug": "poutine-hub",
+      "categoryId": "cat-fries",
+      "name": "Poutine Hub",
+      "description": "Mixed cheese curds, chicken, onions, chilies, gravy and Hub seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 14
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 9
+    },
+    {
+      "id": "item-loaded-chicken-fries",
+      "slug": "loaded-chicken-fries",
+      "categoryId": "cat-fries",
+      "name": "Loaded Chicken Fries",
+      "description": "Popcorn chicken, dill and honey garlic.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 15
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 10
+    },
+    {
+      "id": "item-hub-chicken-fries",
+      "slug": "hub-chicken-fries",
+      "categoryId": "cat-fries",
+      "name": "Hub Chicken Fries",
+      "description": "Popcorn chicken tossed in Hub's sauce, ranch and tex-mex seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 16
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": {
+        "src": "/images/menu/hub-chicken-fries.jpg",
+        "alt": "Bowl of popcorn chicken fries drizzled with ranch and seasoning"
+      },
+      "sortOrder": 11
+    },
+    {
+      "id": "item-steak-fries",
+      "slug": "steak-fries",
+      "categoryId": "cat-fries",
+      "name": "Steak Fries",
+      "description": "Steak strips tossed in Hub's sauce, ranch and tex-mex seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 17
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 12
+    },
+    {
+      "id": "item-prawn-fries",
+      "slug": "prawn-fries",
+      "categoryId": "cat-fries",
+      "name": "Prawn Fries",
+      "description": "Popcorn prawn tossed in Hub's sauce, ranch and tex-mex seasoning.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 17
+        }
+      ],
+      "spiceLevel": 6,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 13
+    },
+    {
+      "id": "item-classic-dip",
+      "slug": "classic-dip",
+      "categoryId": "cat-extras",
+      "name": "Classic Dip (2 oz)",
+      "description": "Choose ranch, dill, blue cheese or caesar.",
+      "prices": [
+        {
+          "label": null,
+          "amount": 1.5
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "item-signature-dip",
+      "slug": "signature-dip",
+      "categoryId": "cat-extras",
+      "name": "Signature Dip (2 oz)",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 2.5
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 2
+    },
+    {
+      "id": "item-gravy",
+      "slug": "gravy",
+      "categoryId": "cat-extras",
+      "name": "Gravy",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 3
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 3
+    },
+    {
+      "id": "item-extra-saucy",
+      "slug": "extra-saucy",
+      "categoryId": "cat-extras",
+      "name": "Extra Saucy",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 1.5
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 4
+    },
+    {
+      "id": "item-add-sauce",
+      "slug": "add-sauce",
+      "categoryId": "cat-extras",
+      "name": "Add Sauce (2 oz)",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 2
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 5
+    }
+  ]
+}

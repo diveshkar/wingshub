@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Address supplied by the owner. The province (ON) comes from the postal code M1X. Optionally add geo coordinates and a Google Maps link (mapsUrl) for better local SEO, then mark as confirmed. Add more entries here for additional locations."
+  },
+  "locations": [
+    {
+      "id": "main",
+      "name": "Wings Hub",
+      "isPrimary": true,
+      "address": {
+        "streetAddress": "Unit 103, 825 Passmore Ave",
+        "locality": "Scarborough",
+        "region": "ON",
+        "postalCode": "M1X 1C8",
+        "country": "CA"
+      },
+      "geo": null,
+      "mapsUrl": null
+    }
+  ]
+}

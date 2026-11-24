@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "The 40 wing flavours transcribed from the supplied menu PDF, with capitalisation tidied ('Hot Honney' read as 'Hot Honey', 'CYLONIYA' as 'Cyloniya'). Proofread the spellings, then mark as confirmed."
+  },
+  "title": "Wing flavours",
+  "description": "Pick your flavour for every order of wings. Bigger orders let you mix in more flavours.",
+  "afterCategorySlug": "wings",
+  "image": {
+    "src": "/images/menu/wing-flavours.jpg",
+    "alt": "Plates of crispy bone-in wings and boneless wings drizzled with ranch, with dips and spices"
+  },
+  "groups": [
+    {
+      "id": "heat-seekers",
+      "name": "Heat Seekers",
+      "sortOrder": 1,
+      "flavours": ["Bombay Blaze", "Chili & Onion", "Mad Mango", "Mad Ranch", "Hub BBQ", "Cyloniya", "Hub Mamba"]
+    },
+    {
+      "id": "sweet-savoury",
+      "name": "Sweet & Savoury",
+      "sortOrder": 2,
+      "flavours": [
+        "Honey BBQ",
+        "Honey Dill",
+        "Honey Garlic",
+        "Honey Garlic Parm",
+        "Honey Lemon",
+        "Honey Roasted Garlic",
+        "Honeymoon",
+        "Hot Honey",
+        "Hot Sweet Heart"
+      ]
+    },
+    {
+      "id": "ranch-creation",
+      "name": "Ranch Creation",
+      "sortOrder": 3,
+      "flavours": ["Classy Ranch", "Creamy Buffalo", "Creamy Honey", "Pepperi Ranch"]
+    },
+    {
+      "id": "hub-signature",
+      "name": "Hub Signature",
+      "sortOrder": 4,
+      "flavours": ["Ram's Secret", "Spicy Garlic Parm", "Mango Firestorm", "Tandoori Blaze"]
+    },
+    {
+      "id": "garlic-lovers",
+      "name": "Garlic Lovers",
+      "sortOrder": 5,
+      "flavours": ["Cajun Garlic", "Golden Garlic Parmesan", "Garlic Knockout", "Hub Garlic Parm"]
+    },
+    {
+      "id": "the-classics",
+      "name": "The Classic Flavours",
+      "sortOrder": 6,
+      "flavours": [
+        "Cheesy Blue",
+        "BBQ",
+        "Dry BBQ",
+        "Buffalo",
+        "Lemon Pepper",
+        "Medium",
+        "Mild",
+        "Hot",
+        "Viper Lemon",
+        "Cajun Fire"
+      ]
+    },
+    {
+      "id": "hubs-made",
+      "name": "Hub's Made",
+      "sortOrder": 7,
+      "flavours": ["K.K's Magic", "Crispy Partner"]
+    }
+  ]
+}

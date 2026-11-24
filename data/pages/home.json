@@ -1,0 +1,34 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Plain copy written only from the supplied menu and address. Review with the owner and change anything that does not sound like them."
+  },
+  "hero": {
+    "headline": ["Wings by the pound.", "40 flavours."],
+    "subheadline": "Lightly dusted wings, loaded fries, wraps and quesadillas in Scarborough, Ontario.",
+    "primaryCta": { "label": "See the menu", "href": "/menu" },
+    "secondaryCta": { "label": "Find us", "href": "/contact" }
+  },
+  "wingsGuide": {
+    "title": "How the wings work",
+    "paragraphs": [
+      "Our wings are lightly dusted and sold by the pound. Bone-in wings come 8 to 9 pieces to the pound, boneless 8 to 10, and veggie wings 10 to 12.",
+      "You choose the flavours. For bone-in orders, 1 and 2 lb come in one flavour, 3 and 4 lb in two flavours, and 5 lb in three. There are 40 to pick from, from Honey Garlic and Buffalo to Bombay Blaze and Mango Firestorm."
+    ],
+    "itemSlugs": ["bone-in-wings", "boneless-wings", "veggie-wings"],
+    "link": { "label": "See all the flavours", "href": "/menu#flavours" }
+  },
+  "featured": {
+    "title": "From the menu",
+    "description": null,
+    "cta": { "label": "Full menu", "href": "/menu" }
+  },
+  "visit": {
+    "title": "Find us",
+    "description": null
+  },
+  "faq": {
+    "title": "Questions",
+    "description": null
+  }
+}

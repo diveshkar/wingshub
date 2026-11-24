@@ -1,0 +1,19 @@
+{
+  "header": {
+    "links": [
+      { "label": "Menu", "href": "/menu" },
+      { "label": "About", "href": "/about" },
+      { "label": "Contact", "href": "/contact" }
+    ],
+    "cta": { "label": "Visit us", "href": "/contact" }
+  },
+  "footer": {
+    "explore": [
+      { "label": "Home", "href": "/" },
+      { "label": "Menu", "href": "/menu" },
+      { "label": "About", "href": "/about" },
+      { "label": "Contact", "href": "/contact" }
+    ],
+    "legal": []
+  }
+}

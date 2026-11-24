@@ -1,0 +1,17 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Facts only, taken from the menu, the address and the owner's answers. Nothing about the history, owners or sourcing has been invented. Add the real story (who started it, when, why) once the owner shares it."
+  },
+  "hero": {
+    "title": "About Wings Hub",
+    "intro": "A halal wings restaurant on Passmore Avenue in Scarborough."
+  },
+  "story": {
+    "paragraphs": [
+      "Wings Hub is a halal wings restaurant in Scarborough, Ontario.",
+      "The wings are lightly dusted and sold by the pound: bone-in, boneless or veggie. You choose the flavours from a list of 40, and bigger orders let you pick more than one.",
+      "Alongside the wings you will find loaded fries and poutine, wraps, quesadillas and appetizers such as calamari, samosas and coconut shrimp, plus combos and bundles for sharing."
+    ]
+  }
+}

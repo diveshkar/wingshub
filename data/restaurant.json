@@ -1,0 +1,46 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "The owner confirmed the name is 'Wings Hub' (two words), that the food is halal, that cash and card are accepted and that customers can order online through Uber Eats and DoorDash. Check the exact wording before launch. Still to add: the Uber Eats and DoorDash links (onlineOrdering), dine-in, takeaway and reservations (services) and the price range. Brand copy is draft."
+  },
+  "id": "wingshub",
+  "name": "Wings Hub",
+  "legalName": null,
+  "tagline": "Wings by the pound. 40 flavours.",
+  "shortDescription": "Wings Hub in Scarborough serves halal, lightly dusted wings in 40 flavours, plus loaded fries, wraps, quesadillas and bundles.",
+  "description": "Wings Hub is a halal wings restaurant in Scarborough, Ontario. We serve lightly dusted wings, sold by the pound in 40 flavours, alongside loaded fries and poutine, wraps, quesadillas, appetizers and bundles for sharing.",
+  "cuisines": ["Chicken Wings", "Halal", "Wraps", "Quesadillas", "Poutine"],
+  "priceRange": null,
+  "logo": {
+    "src": "/images/brand/logo.jpg",
+    "alt": "Wings Hub logo: a red chicken drumstick over flames inside a red circle"
+  },
+  "logoOnDark": {
+    "src": "/images/brand/logo-transparent.png",
+    "alt": "Wings Hub logo: a red chicken drumstick over flames inside a red circle",
+    "width": 720,
+    "height": 683
+  },
+  "media": {
+    "hero": {
+      "src": "/images/hero/wings-ranch-drizzle.jpg",
+      "alt": "Tray of wings drizzled with ranch and dusted with spice on a dark background"
+    },
+    "about": {
+      "src": "/images/about/wings-spread.jpg",
+      "alt": "Spread of crispy wings, boneless wings with ranch and a bowl of chili onion fries with two cans of pop"
+    }
+  },
+  "social": [],
+  "paymentMethods": ["Cash", "Card"],
+  "onlineOrdering": [
+    { "name": "Uber Eats", "url": null },
+    { "name": "DoorDash", "url": null }
+  ],
+  "services": {
+    "dineIn": null,
+    "takeaway": null,
+    "delivery": true,
+    "reservations": null
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Real categories transcribed from the supplied menu PDF (Classic Mojito.pdf), reordered so the wings lead. Proofread, then mark as confirmed."
+  },
+  "categories": [
+    {
+      "id": "cat-wings",
+      "slug": "wings",
+      "name": "Wings",
+      "description": "Lightly dusted wings, sold by the pound, in your choice of flavour.",
+      "icon": "wings",
+      "image": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "cat-hub-exclusive",
+      "slug": "hub-exclusive",
+      "name": "Hub Exclusive",
+      "description": "Wings, fries and pop in a set combo. Limited modifications.",
+      "icon": "combos",
+      "image": null,
+      "sortOrder": 2
+    },
+    {
+      "id": "cat-bundles",
+      "slug": "ultimate-bundles",
+      "name": "Ultimate Bundles",
+      "description": "Wings, fries and drinks bundled for one, two or a whole crowd.",
+      "icon": "combos",
+      "image": null,
+      "sortOrder": 3
+    },
+    {
+      "id": "cat-wraps",
+      "slug": "wraps",
+      "name": "Wraps",
+      "description": "All wraps are served with house fries and your choice of dipping sauce.",
+      "icon": "wraps",
+      "image": null,
+      "sortOrder": 4
+    },
+    {
+      "id": "cat-quesadillas",
+      "slug": "quesadillas",
+      "name": "Quesadillas",
+      "description": "Cheese, chicken, steak, mutton or prawns.",
+      "icon": "quesadillas",
+      "image": null,
+      "sortOrder": 5
+    },
+    {
+      "id": "cat-appetizers",
+      "slug": "appetizers",
+      "name": "Appetizers",
+      "description": "Shareable starters to kick things off.",
+      "icon": "appetizers",
+      "image": null,
+      "sortOrder": 6
+    },
+    {
+      "id": "cat-fries",
+      "slug": "fries",
+      "name": "Fries",
+      "description": "Seasoned fries, loaded fries and poutine.",
+      "icon": "fries",
+      "image": null,
+      "sortOrder": 7
+    },
+    {
+      "id": "cat-extras",
+      "slug": "extras",
+      "name": "Extras",
+      "description": "Dips, gravy and extra sauce.",
+      "icon": "extras",
+      "image": null,
+      "sortOrder": 8
+    }
+  ]
+}

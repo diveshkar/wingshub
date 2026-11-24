@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Draft copy. The tax note and the spicy level range (1 to 6) come from the owner. The footnote is the allergy disclaimer printed on the supplied menu."
+  },
+  "hero": {
+    "title": "Menu",
+    "intro": "Wings by the pound in 40 flavours, plus wraps, quesadillas, loaded fries, appetizers and bundles."
+  },
+  "pricesNote": "All prices are in Canadian dollars and do not include tax. Tax is added to your bill.",
+  "spiceNote": "Spicy level runs from 1 to 6, with 6 the hottest.",
+  "footnote": "Allergy disclaimer: we cannot guarantee that any menu item is completely free from cross-contamination."
+}

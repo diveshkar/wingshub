@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "status": "draft",
+    "note": "Draft FAQs built from the supplied menu and address and the owner's answers. They also feed the FAQPage structured data. Answers that repeat the opening hours, phone number or tax rule must be updated if those change."
+  },
+  "faqs": [
+    {
+      "id": "faq-what-is-wings-hub",
+      "question": "What is Wings Hub?",
+      "answer": "Wings Hub is a halal wings restaurant in Scarborough, Ontario. We serve lightly dusted wings in 40 flavours, plus loaded fries and poutine, wraps, quesadillas, appetizers and bundles for sharing.",
+      "sortOrder": 1
+    },
+    {
+      "id": "faq-location",
+      "question": "Where is Wings Hub located?",
+      "answer": "Wings Hub is at Unit 103, 825 Passmore Ave, Scarborough, ON M1X 1C8.",
+      "sortOrder": 2
+    },
+    {
+      "id": "faq-hours",
+      "question": "What are your opening hours?",
+      "answer": "We are open every day from 3 p.m. to midnight.",
+      "sortOrder": 3
+    },
+    {
+      "id": "faq-menu",
+      "question": "What is on the Wings Hub menu?",
+      "answer": "Our menu covers bone-in, boneless and veggie wings in 40 flavours, wraps, quesadillas, appetizers, fries and poutine, combos and bundles, and extra dips and sauces. Prices are in Canadian dollars and listed on the menu page.",
+      "sortOrder": 4
+    },
+    {
+      "id": "faq-how-wings-are-sold",
+      "question": "How are the wings sold?",
+      "answer": "Wings are sold by the pound. Bone-in wings come in 8 to 9 pieces per pound, boneless wings in 8 to 10 and veggie wings in 10 to 12. Larger orders let you choose more flavours: one flavour up to 2 lb, two flavours for 3 to 4 lb and three flavours for 5 lb.",
+      "sortOrder": 5
+    },
+    {
+      "id": "faq-spice",
+      "question": "How spicy are the wings?",
+      "answer": "Our spicy levels run from 1 to 6, with 6 the hottest. Menu items that have a spicy level are marked on the menu page.",
+      "sortOrder": 6
+    },
+    {
+      "id": "faq-halal",
+      "question": "Is the food halal?",
+      "answer": "Yes, the food at Wings Hub is halal.",
+      "sortOrder": 7
+    },
+    {
+      "id": "faq-veggie",
+      "question": "Do you have veggie options?",
+      "answer": "Yes. The menu includes Veggie Wings, a Veg Wrap and Deep Fried Cauli-Bites. We cannot guarantee that any menu item is completely free from cross-contamination.",
+      "sortOrder": 8
+    },
+    {
+      "id": "faq-online-ordering",
+      "question": "Can I order online?",
+      "answer": "Yes. You can order online through Uber Eats and DoorDash.",
+      "sortOrder": 9
+    },
+    {
+      "id": "faq-payment",
+      "question": "What payment methods do you accept?",
+      "answer": "We accept cash and card.",
+      "sortOrder": 10
+    },
+    {
+      "id": "faq-tax",
+      "question": "Do the menu prices include tax?",
+      "answer": "No. Menu prices are shown without tax, and tax is added to your bill.",
+      "sortOrder": 11
+    },
+    {
+      "id": "faq-contact",
+      "question": "How can I contact Wings Hub?",
+      "answer": "Call us on (416) 666-3760, email info@wingshub.co or send a message using the contact form on our contact page.",
+      "sortOrder": 12
+    }
+  ]
+}
