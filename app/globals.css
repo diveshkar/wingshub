@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./story.css";
 
 /* ------------------------------------------------------------------ */
 /* Design tokens                                                       */
@@ -94,30 +95,7 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Hero backdrop: black fading into deep red behind the photo          */
-/* ------------------------------------------------------------------ */
-
-@layer components {
-  .hero-backdrop {
-    background-image:
-      radial-gradient(90% 55% at 50% 88%, rgb(200 8 14 / 0.4), transparent 72%),
-      linear-gradient(180deg, var(--color-ink-900) 0%, var(--color-ink-900) 42%, #2a0408 100%);
-  }
-
-  /* From lg up the glow follows the photo: its centre sits about 77% across the 1200px container,
-     so the position is measured from the container rather than the full screen width. */
-  @media (min-width: 1024px) {
-    .hero-backdrop {
-      background-image:
-        radial-gradient(36rem 40rem at calc(50% + 0.27 * min(100%, 1200px)) 50%, rgb(210 8 14 / 0.46), transparent 72%),
-        radial-gradient(55% 55% at 0% 100%, rgb(120 0 6 / 0.3), transparent 70%),
-        linear-gradient(110deg, var(--color-ink-900) 0%, var(--color-ink-900) 38%, #2a0408 100%);
-    }
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/* Motion                                                              */
+/* Motion (the home page wing story lives in story.css)                */
 /* ------------------------------------------------------------------ */
 
 @keyframes rise-in {
@@ -137,27 +115,6 @@
   }
   to {
     transform: scale(1);
-  }
-}
-
-/* A cut-out wing flies in and settles at its tilt (--tilt), then drifts gently up and down. */
-@keyframes wing-enter {
-  from {
-    opacity: 0;
-    transform: translate3d(2.5rem, -3rem, 0) rotate(calc(var(--tilt) + 16deg)) scale(0.85);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) rotate(var(--tilt)) scale(1);
-  }
-}
-
-@keyframes wing-drift {
-  from {
-    transform: translate3d(0, 0, 0) rotate(var(--tilt));
-  }
-  to {
-    transform: translate3d(0, -0.6rem, 0) rotate(calc(var(--tilt) + 3deg));
   }
 }
 
@@ -196,17 +153,6 @@
   .rise-in {
     animation: rise-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
     animation-delay: var(--delay, 0ms);
-  }
-
-  .hero-photo img {
-    animation: photo-settle 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
-
-  .wing-float {
-    filter: drop-shadow(0 1.1rem 1.1rem rgb(0 0 0 / 0.5));
-    animation:
-      wing-enter 1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0.4s) both,
-      wing-drift var(--duration, 7s) ease-in-out calc(var(--delay, 0.4s) + 1s) infinite alternate;
   }
 
   .sauce-splash {
@@ -271,13 +217,7 @@
   /* No movement at all: everything simply rests in its final position. */
   .reveal,
   .rise-in,
-  .hero-photo img,
-  .wing-float,
   .sauce-splash {
     animation: none !important;
-  }
-
-  .wing-float {
-    transform: rotate(var(--tilt));
   }
 }

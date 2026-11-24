@@ -1,0 +1,873 @@
+/* =============================================================================
+   The wing story (home page)
+
+   A round window onto the kitchen that stays with the visitor. It opens on the tossing photo, where
+   two wings that have just hit each other recoil and drop into the bowl of sauce (the wings are cut
+   out of that same photo, so nothing is pasted on). As the visitor scrolls, the window opens onto the
+   next photos in turn: the wings being dusted, cooked, tossed and bitten into. The opening is plain
+   CSS. The scroll part is driven by a handful of custom properties that StoryController writes onto
+   the elements that use them. Every property has a resting value, so without JavaScript (or with
+   reduced motion) the window simply shows the tossing photo.
+   ============================================================================= */
+
+@layer components {
+  /* ---- Layout -------------------------------------------------------------- */
+
+  .hero-backdrop {
+    background:
+      radial-gradient(52rem 38rem at 76% 15rem, rgb(190 8 14 / 0.34), transparent 70%),
+      linear-gradient(180deg, var(--color-ink-900) calc(100% - 22rem), #2a0408 100%);
+  }
+
+  .story-grid {
+    --stage-d: min(30rem, 44svh, calc(100vw - 2.5rem));
+    --stick-top: calc(var(--header-h) + 0.75rem);
+    --step-len: 50svh;
+    --caption-h: 9.5rem;
+    display: block;
+  }
+
+  .story-intro {
+    margin-bottom: 2rem;
+  }
+
+  .story-sticky {
+    position: sticky;
+    top: var(--stick-top);
+    z-index: 2;
+  }
+
+  .story-track {
+    height: calc(4 * var(--step-len) + var(--caption-h));
+  }
+
+  .story-captions {
+    position: sticky;
+    top: calc(var(--stick-top) + var(--stage-d) + 1.25rem);
+    display: grid;
+    min-height: var(--caption-h);
+    align-content: start;
+    padding-top: 1.25rem;
+  }
+
+  /* Captions that have not come yet wait below, ones already shown float away above. The one
+     leaving is quick; the one arriving waits a beat, so the two never sit on top of each other. */
+  .story-caption {
+    grid-area: 1 / 1;
+    opacity: 0;
+    translate: 0 1rem;
+    transition:
+      opacity 0.16s ease,
+      translate 0.2s ease-in;
+  }
+
+  [data-step="1"] .story-caption:nth-child(1),
+  [data-step="2"] .story-caption:nth-child(-n + 2),
+  [data-step="3"] .story-caption:nth-child(-n + 3) {
+    translate: 0 -1rem;
+  }
+
+  [data-step="0"] .story-caption:nth-child(1),
+  [data-step="1"] .story-caption:nth-child(2),
+  [data-step="2"] .story-caption:nth-child(3),
+  [data-step="3"] .story-caption:nth-child(4) {
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 0.45s ease 0.15s,
+      translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+  }
+
+  /* Plain photos under the captions, for visitors who get no animation (see the end of this file). */
+  .story-figure {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .story-grid {
+      --stage-d: min(30rem, calc((min(100vw, 1200px) - 9rem) * 0.45));
+      --stick-top: calc(var(--header-h) + 5rem);
+      --step-len: 62svh;
+      --caption-h: var(--stage-d);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "intro stage"
+        "track stage";
+      column-gap: 4rem;
+    }
+
+    .story-intro {
+      grid-area: intro;
+      display: flex;
+      min-height: var(--stage-d);
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    /* Without align-self the plate would stretch to the full height of its column and never move. */
+    .story-sticky {
+      grid-area: stage;
+      align-self: start;
+    }
+
+    .story-track {
+      grid-area: track;
+    }
+
+    .story-captions {
+      top: var(--stick-top);
+      height: var(--stage-d);
+      align-content: center;
+      padding-top: 0;
+    }
+  }
+
+  /* ---- The stage: a square that everything inside is measured against (cqw) ---- */
+
+  .story-stage {
+    container-type: inline-size;
+    position: relative;
+    width: var(--stage-d);
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+
+  .story-glow {
+    position: absolute;
+    inset: -24%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      rgb(215 8 14 / 0.55),
+      rgb(190 6 12 / 0.4) 58%,
+      rgb(120 0 6 / 0.14) 80%,
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .story-shadow {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: -3%;
+    height: 9%;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.65);
+    filter: blur(1.6cqw);
+    pointer-events: none;
+  }
+
+  /* ---- The plate: a dark ceramic rim around a round window ---- */
+
+  .story-plate {
+    position: absolute;
+    inset: 0;
+  }
+
+  .story-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 30deg, #303035, #151517 28%, #2b2b30 52%, #111113 78%, #303035);
+    box-shadow:
+      0 0 0 0.5cqw rgb(255 255 255 / 0.06),
+      0 5cqw 9cqw -4cqw rgb(0 0 0 / 0.85);
+  }
+
+  .story-lens {
+    position: absolute;
+    inset: 4cqw;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 50%;
+    background: #0b0b0c;
+    box-shadow: inset 0 0 0 0.4cqw rgb(0 0 0 / 0.65);
+    /* Each bite gives the whole picture a small tug (rotate and scale are set by story-controller.tsx). */
+  }
+
+  /* Depth: darker towards the edge, a soft light on the glaze, like looking into a dish. */
+  .story-lens::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 60%, rgb(0 0 0 / 0.5) 100%),
+      radial-gradient(circle at 30% 18%, rgb(255 255 255 / 0.07), transparent 46%);
+    box-shadow: inset 0 2cqw 4cqw rgb(0 0 0 / 0.4);
+    pointer-events: none;
+  }
+
+  /* ---- The scenes: photos stacked in the window. Each one opens over the one before. ---- */
+
+  .scene {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* 0. The opening: the tossing photo. It eases in very slowly, like a camera pushing towards the bowl. */
+  .scene-hero {
+    transform-origin: 38% 56%;
+    animation: hero-push 10s cubic-bezier(0.22, 0.6, 0.2, 1) both;
+  }
+
+  /*
+    Once the layers have arrived (see hero-live.tsx) they replace the photo with no visible change, and the
+    moment in the photo carries on. --k is one pixel of the 1200 px photo, so every number below is a
+    position in that photo. The two wings touch in the photo: that is the instant of the clash.
+  */
+  .scene-live {
+    --k: calc(92cqw / 1200);
+    --base: 650ms;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .scene-live[data-live] {
+    opacity: 1;
+  }
+
+  .scene-live > img {
+    object-fit: cover;
+  }
+
+  .live-defs {
+    position: absolute;
+  }
+
+  .air {
+    position: absolute;
+    inset: 0;
+  }
+
+  .fall,
+  .rise {
+    position: absolute;
+    transform-origin: 50% 50%;
+  }
+
+  .layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  .layer img,
+  .rise img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+  }
+
+  /* The blur of speed: a copy that is smeared up and down, faded in as the wing picks up pace. */
+  .layer-blur {
+    filter: url(#fall-blur);
+    opacity: 0;
+  }
+
+  .scene-live[data-live] .fall-w1 {
+    animation:
+      w1-move 1800ms linear var(--base) both,
+      fall-dim 1800ms linear var(--base) both;
+  }
+
+  .scene-live[data-live] .fall-w2 {
+    animation:
+      w2-move 1800ms linear var(--base) both,
+      fall-dim 1800ms linear var(--base) both;
+  }
+
+  .scene-live[data-live] .layer-sharp {
+    animation: sharp-out 1800ms linear var(--base) both;
+  }
+
+  .scene-live[data-live] .layer-blur {
+    animation: blur-in 1800ms linear var(--base) both;
+  }
+
+  /* Sauce thrown off by the clash, and up from behind the rim as the wings drop in. */
+  .beads {
+    position: absolute;
+    inset: 0;
+  }
+
+  .bead {
+    position: absolute;
+    left: calc(var(--x) / 12 * 1%);
+    top: calc(var(--y) / 12 * 1%);
+    width: calc(var(--sz) * var(--k));
+    aspect-ratio: 1;
+    opacity: 0;
+  }
+
+  .bead i {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bead i,
+  .tbead {
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 31% 27%, rgb(255 246 222 / 0.95) 0 8%, transparent 24%),
+      radial-gradient(circle at 50% 50%, #ff8d33 0, #e2540f 54%, #8a2204 100%);
+    box-shadow: inset -0.12cqw -0.18cqw 0.3cqw rgb(80 16 0 / 0.55);
+  }
+
+  .scene-live[data-live] .bead {
+    animation: bead-x 1100ms linear calc(var(--base) + var(--at) * 1ms) forwards;
+  }
+
+  .scene-live[data-live] .bead i {
+    animation: bead-y 1100ms linear calc(var(--base) + var(--at) * 1ms) forwards;
+  }
+
+  /* The kitchen photos fade in when they have loaded, so a slow connection never shows a blank. */
+  .scene-dust img,
+  .scene-cook img,
+  .scene-bite img,
+  .scene-eaten img {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .scene-dust img[data-loaded],
+  .scene-cook img[data-loaded],
+  .scene-bite img[data-loaded],
+  .scene-eaten img[data-loaded] {
+    opacity: 1;
+  }
+
+  /* 1. Dusting: opens like an iris from the sieve, then slowly pushes in. */
+  .scene-dust {
+    --t1: 0;
+    --dust: 0;
+    clip-path: circle(calc(var(--t1) * 88%) at 45% 40%);
+  }
+
+  .scene-dust img {
+    transform-origin: 45% 40%;
+    scale: calc(1.22 - var(--dust) * 0.16);
+    translate: calc(var(--dust) * -1.2cqw) calc(var(--dust) * 0.8cqw);
+  }
+
+  /* 2. Cooking: fades in through steam while the basket rises into place. */
+  .scene-cook {
+    --t2: 0;
+    --cook: 0;
+    opacity: var(--t2);
+  }
+
+  .scene-cook img {
+    transform-origin: 48% 52%;
+    scale: calc(1.16 - var(--cook) * 0.1);
+    translate: 0 calc((1 - var(--t2)) * 7cqw - var(--cook) * 1.2cqw);
+    rotate: calc((1 - var(--t2)) * -2.5deg);
+  }
+
+  /* 4. Biting: waits underneath the toss until the first bite. */
+  .scene-bite {
+    --bite-vis: 0;
+    --bitek: 0;
+    opacity: var(--bite-vis);
+  }
+
+  .scene-bite img {
+    transform-origin: 58% 42%;
+    scale: calc(1.2 - var(--bitek) * 0.12);
+  }
+
+  /*
+    3. Tossing: arrives with a flash of sauce, the bowl rocks, and the same two wings that dropped in at the
+    start climb back out of it (scroll-driven: --rise). Then it is eaten away (the bite mask is on
+    .scene-eaten, set in components/story/bite-mask.ts).
+  */
+  .scene-toss {
+    --k: calc(92cqw / 1200);
+    --t3: 0;
+    --toss: 0;
+    --rise: 0;
+    --splash: 0;
+    --bite1: 0;
+    --bite2: 0;
+    --bite3: 0;
+    opacity: var(--t3);
+  }
+
+  .scene-eaten {
+    position: absolute;
+    inset: 0;
+  }
+
+  .toss-rig {
+    position: absolute;
+    inset: 0;
+    transform-origin: 56% 55%;
+    scale: calc(1.12 - var(--toss) * 0.05);
+    rotate: calc(sin(var(--toss) * 9.4) * 1.1deg);
+    translate: 0 calc(sin(var(--toss) * 12.5) * -0.8cqw);
+  }
+
+  .rise-w1 {
+    translate: calc((1 - var(--rise)) * -10 * var(--k)) calc((1 - var(--rise)) * 1020 * var(--k));
+    rotate: calc((1 - var(--rise)) * -14deg);
+    scale: calc(1 + (1 - var(--rise)) * 0.1);
+    filter: brightness(calc(0.5 + var(--rise) * 0.5)) blur(calc(var(--rise) * (1 - var(--rise)) * 14px));
+  }
+
+  .rise-w2 {
+    translate: calc((1 - var(--rise)) * 90 * var(--k)) calc((1 - var(--rise)) * 860 * var(--k));
+    rotate: calc((1 - var(--rise)) * 12deg);
+    scale: calc(1 + (1 - var(--rise)) * 0.08);
+    filter: brightness(calc(0.5 + var(--rise) * 0.5)) blur(calc(var(--rise) * (1 - var(--rise)) * 14px));
+  }
+
+  .tbead {
+    position: absolute;
+    left: calc(var(--x) / 12 * 1%);
+    top: calc(var(--y) / 12 * 1%);
+    width: calc(var(--sz) * var(--k));
+    aspect-ratio: 1;
+    opacity: clamp(0, var(--splash) * 10, 1);
+    translate: calc(var(--dx) * var(--splash) * var(--k))
+      calc((var(--g) * var(--splash) * var(--splash) - var(--up) * var(--splash)) * var(--k));
+  }
+
+  /* ---- Effects laid over the photos ---- */
+
+  .story-fx {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .story-veil {
+    position: absolute;
+    inset: 0;
+  }
+
+  .fx-group {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* A cloud of steam hides the change from dusting to cooking. */
+  .story-veil-steam {
+    --veil: 0;
+    background: radial-gradient(
+      circle at 50% 56%,
+      rgb(255 255 255 / 0.6),
+      rgb(255 255 255 / 0.16) 55%,
+      transparent 78%
+    );
+    opacity: calc(var(--veil) * 0.85);
+  }
+
+  /* A flash of sauce hides the change from cooking to tossing. */
+  .story-veil-sauce {
+    --flash: 0;
+    background: radial-gradient(
+      circle at 56% 56%,
+      rgb(255 150 60 / 0.9),
+      rgb(229 8 13 / 0.5) 48%,
+      transparent 78%
+    );
+    mix-blend-mode: screen;
+    opacity: var(--flash);
+  }
+
+  /* Spice falling from the sieve. */
+  [data-scope="specks"] {
+    --spice: 0;
+    --spice-a: 0;
+  }
+
+  .speck {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc((var(--y) + var(--spice) * var(--fall)) * 1%);
+    width: calc(var(--sz) * 1cqw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--tone);
+    opacity: calc(var(--spice-a) * var(--o));
+    translate: calc(sin(var(--spice) * 6.28 * var(--sway)) * 1.1cqw) 0;
+  }
+
+  /* Steam drifts up on its own, but only while its photo is showing. */
+  [data-scope="steam-cook"] {
+    --steam1: 0;
+  }
+
+  [data-scope="steam-bite"] {
+    --steam2: 0;
+  }
+
+  .wisp {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: calc(var(--w) * 1cqw);
+    height: calc(var(--h) * 1cqw);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.5), transparent);
+    filter: blur(0.7cqw);
+    opacity: 0;
+    animation: wisp-rise 5.5s ease-out var(--d) infinite;
+    animation-play-state: paused;
+  }
+
+  .wisp-cook {
+    --z: var(--steam1);
+  }
+
+  .wisp-bite {
+    --z: var(--steam2);
+  }
+
+  [data-step="1"] .wisp-cook,
+  [data-step="2"] .wisp-cook,
+  [data-step="3"] .wisp-bite {
+    animation-play-state: running;
+  }
+
+  /* Crumbs fall from each bite. --c is how far along that bite's crumbs are (0 to 1). */
+  [data-scope="crumbs-1"] {
+    --crumb1: 0;
+    --c: var(--crumb1);
+  }
+
+  [data-scope="crumbs-2"] {
+    --crumb2: 0;
+    --c: var(--crumb2);
+  }
+
+  [data-scope="crumbs-3"] {
+    --crumb3: 0;
+    --c: var(--crumb3);
+  }
+
+  .crumb {
+    position: absolute;
+    left: calc(var(--x) * 1%);
+    top: calc(var(--y) * 1%);
+    width: calc(var(--sz) * 1cqw);
+    height: calc(var(--sz) * 0.8cqw);
+    border-radius: 35% 60% 45% 55%;
+    background: var(--tone);
+    opacity: calc(clamp(0, var(--c) * 10, 1) * clamp(0, (1 - var(--c)) * 3, 1));
+    translate: calc(var(--dx) * var(--c) * 1cqw)
+      calc((var(--dy) * var(--c) + var(--g) * var(--c) * var(--c)) * 1cqw);
+    rotate: calc(var(--c) * var(--spin) * 1deg);
+  }
+
+  /* ---- Joining the sections together ---- */
+
+  .sauce-drip {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: 3;
+    height: 5.5rem;
+    pointer-events: none;
+  }
+
+  .sauce-drip::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: -0.35rem;
+    height: 0.9rem;
+    background: linear-gradient(#ff3b3f, #c4030a 55%, #8c0207);
+    box-shadow: inset 0 0.2rem 0.25rem rgb(255 255 255 / 0.28);
+  }
+
+  .sauce-drip i {
+    position: absolute;
+    top: 0.3rem;
+    left: var(--x);
+    width: var(--w);
+    height: var(--h);
+    border-radius: 0 0 999px 999px;
+    background: linear-gradient(90deg, #ff4a4d, #c4030a 55%, #9a0409);
+    box-shadow: inset 0.25rem 0 0.3rem rgb(255 255 255 / 0.25);
+    transform-origin: top;
+  }
+
+  .sauce-drip i::after {
+    content: "";
+    position: absolute;
+    bottom: -0.55rem;
+    left: 50%;
+    width: calc(var(--w) * 0.8);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff7a7c, #c4030a 60%);
+  }
+
+  .bite-edge {
+    position: absolute;
+    top: 0;
+    right: clamp(1.5rem, 9vw, 9rem);
+    z-index: 3;
+    width: 7rem;
+    height: 3.6rem;
+    pointer-events: none;
+  }
+
+  .bite-edge i {
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--d);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--color-bone-200);
+  }
+
+  @supports (animation-timeline: view()) {
+    .sauce-drip i {
+      animation: drip-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+
+    .sauce-drip i::after {
+      animation: drip-fade linear both;
+      animation-timeline: view();
+      animation-range: entry 55% entry 100%;
+    }
+
+    .bite-edge {
+      transform-origin: 50% 0;
+      animation: bite-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+  }
+}
+
+/* ---- Keyframes ---- */
+
+@keyframes hero-push {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.05;
+  }
+}
+
+/*
+  The two wings. Offsets are from where they hang in the photo, in photo pixels (--k). For the first 14%
+  they recoil from the hit (quickly at first, then slowing). After that gravity takes over: they speed up
+  all the way down, tumble a little, grow slightly as they come towards the camera, and the bowl's front
+  rim (the clip on .air) hides them as they drop in. An ease-in is right here: it is a falling object,
+  not a button.
+*/
+@keyframes w1-move {
+  0% {
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.1, 0.55, 0.3, 1);
+  }
+  14.4% {
+    translate: calc(30 * var(--k)) calc(-34 * var(--k));
+    rotate: 4.5deg;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  }
+  100% {
+    translate: calc(-10 * var(--k)) calc(1020 * var(--k));
+    rotate: -14deg;
+    scale: 1.1;
+  }
+}
+
+@keyframes w2-move {
+  0% {
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.1, 0.55, 0.3, 1);
+  }
+  14.4% {
+    translate: calc(-20 * var(--k)) calc(22 * var(--k));
+    rotate: -4deg;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  }
+  100% {
+    translate: calc(90 * var(--k)) calc(860 * var(--k));
+    rotate: 12deg;
+    scale: 1.08;
+  }
+}
+
+/* Deeper in the bowl it is darker: the wings dim as they go down. */
+@keyframes fall-dim {
+  0%,
+  45% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(0.5);
+  }
+}
+
+@keyframes sharp-out {
+  0%,
+  38% {
+    opacity: 1;
+  }
+  62%,
+  100% {
+    opacity: 0.08;
+  }
+}
+
+@keyframes blur-in {
+  0%,
+  38% {
+    opacity: 0;
+  }
+  62%,
+  100% {
+    opacity: 0.96;
+  }
+}
+
+/* Sauce: sideways at a steady pace, up then down under gravity. Opacity is set by the sideways one. */
+@keyframes bead-x {
+  from {
+    translate: 0 0;
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  to {
+    translate: calc(var(--dx) * var(--k)) 0;
+    opacity: 0;
+  }
+}
+
+@keyframes bead-y {
+  0% {
+    translate: 0 0;
+    animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1);
+  }
+  38% {
+    translate: 0 calc(var(--up) * -1 * var(--k));
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.45);
+  }
+  100% {
+    translate: 0 calc(var(--down) * var(--k));
+  }
+}
+
+/* A wisp of steam grows, drifts up and fades. --z is how much steam this photo should show. */
+@keyframes wisp-rise {
+  0% {
+    translate: 0 0;
+    scale: 0.7;
+    opacity: 0;
+  }
+  20% {
+    opacity: calc(var(--z) * 0.8);
+  }
+  100% {
+    translate: calc(var(--drift) * 1cqw) calc(var(--rise) * -1cqw);
+    scale: 1.6;
+    opacity: 0;
+  }
+}
+
+@keyframes drip-grow {
+  from {
+    scale: 1 0.12;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes drip-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bite-grow {
+  from {
+    scale: 0;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+/* ---- Reduced motion, and no JavaScript: show the tossing photo, and each caption with its own
+   plain photo underneath, so the whole story is still there without any movement ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-hero,
+  .sauce-drip i,
+  .sauce-drip i::after,
+  .bite-edge {
+    animation: none !important;
+  }
+
+  .story-fx {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .story-sticky,
+  .story-captions {
+    position: static;
+  }
+
+  .story-track {
+    height: auto;
+  }
+
+  .story-captions {
+    display: block;
+    height: auto;
+    padding-top: 2rem;
+  }
+
+  .story-caption {
+    margin-bottom: 2.5rem;
+    opacity: 1;
+    translate: none;
+  }
+
+  .story-figure {
+    display: block;
+    width: min(100%, 15rem);
+    margin-top: 1.25rem;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.35rem #1b1b1e,
+      0 1rem 2rem -1rem rgb(0 0 0 / 0.8);
+  }
+}

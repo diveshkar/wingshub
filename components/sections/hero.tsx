@@ -2,19 +2,26 @@ import { Fragment } from "react";
 import type { CSSProperties } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { FloatingWing } from "@/components/ui/floating-wing";
-import { FoodImage } from "@/components/ui/food-image";
-import { getPageContent, getPrimaryLocation, getRestaurant } from "@/lib/data";
+import { SauceDrip } from "@/components/story/sauce-drip";
+import { StoryController } from "@/components/story/story-controller";
+import { StaticPhoto } from "@/components/story/static-photo";
+import { STORY_PHOTOS } from "@/components/story/story-photos";
+import { StoryStage } from "@/components/story/story-stage";
+import { getPageContent, getPrimaryLocation } from "@/lib/data";
 import { cn } from "@/lib/utils/cn";
 import { hasAddress } from "@/lib/utils/format";
 
 /** Start time of an entrance animation, in milliseconds. */
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
+/**
+ * The top of the home page. The headline is the first thing you read; the plate beside it is where
+ * two wings clash and drop, and then follows you down while the captions explain how a wing is
+ * made. See app/story.css for the layout and components/story for the pieces.
+ */
 export async function Hero() {
-  const [{ hero }, restaurant, location] = await Promise.all([
+  const [{ hero, story }, location] = await Promise.all([
     getPageContent("home"),
-    getRestaurant(),
     getPrimaryLocation(),
   ]);
 
@@ -24,16 +31,14 @@ export async function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
+      data-story
+      data-step="-1"
       className="relative isolate overflow-x-clip bg-ink-900 text-bone-50"
     >
       <div aria-hidden="true" className="hero-backdrop pointer-events-none absolute inset-0 -z-10" />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-px bg-gradient-to-r from-transparent via-flame-500/70 to-transparent"
-      />
 
-      <Container className="grid grid-cols-1 items-center gap-8 pb-14 pt-10 sm:gap-10 sm:pb-16 sm:pt-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 lg:py-20">
-        <div>
+      <Container className="story-grid pb-16 pt-10 sm:pt-14 lg:py-20">
+        <div className="story-intro">
           {place && (
             <p
               className="rise-in font-display text-sm font-bold uppercase tracking-[0.14em] text-ink-300"
@@ -76,38 +81,33 @@ export async function Hero() {
           </div>
         </div>
 
-        <div className="relative">
-          <div className="hero-photo relative aspect-[4/3] overflow-hidden rounded-xl bg-ink-800 shadow-[0_24px_60px_-24px_rgb(229_8_13/0.6)] ring-1 ring-flame-500/30 md:aspect-[16/9] lg:aspect-[4/5]">
-            <FoodImage
-              image={restaurant.media.hero}
-              icon="wings"
-              sizes="(min-width: 1024px) 520px, 100vw"
-              preload
-            />
-          </div>
+        <div className="story-sticky">
+          <StoryStage />
+        </div>
 
-          <FloatingWing
-            src="/images/animation/wing-drip.webp"
-            width={459}
-            height={478}
-            sizes="(min-width: 1024px) 200px, (min-width: 768px) 130px, 100px"
-            tilt={-8}
-            delay={0.5}
-            duration={7}
-            className="-right-1 -top-6 w-[28%] md:-top-8 md:right-2 md:w-[17%] lg:-right-[8%] lg:-top-[8%] lg:w-[42%]"
-          />
-          <FloatingWing
-            src="/images/animation/wings-splash.webp"
-            width={510}
-            height={352}
-            sizes="(min-width: 1024px) 260px, (min-width: 768px) 160px, 130px"
-            tilt={9}
-            delay={0.8}
-            duration={8.5}
-            className="-bottom-5 -left-1 w-[36%] md:-bottom-6 md:left-0 md:w-[22%] lg:-bottom-[4%] lg:-left-[14%] lg:w-[54%]"
-          />
+        <div className="story-track" data-story-track>
+          <div className="story-captions" data-story-captions>
+            {story.steps.map((step, index) => (
+              <div key={step.title} className="story-caption">
+                <span aria-hidden="true" className="mb-4 block h-1 w-12 bg-flame-500" />
+                <h2 className="font-display text-[clamp(1.9rem,1.1rem+3.2vw,3.4rem)] font-black uppercase leading-[1.02]">
+                  {step.title}
+                </h2>
+                <p className="mt-4 max-w-md font-serif text-lg leading-relaxed text-ink-300 sm:text-xl">
+                  {step.text}
+                </p>
+                {/* Hidden while the plate animates; shown for visitors who get no animation. */}
+                <figure className="story-figure">
+                  <StaticPhoto photo={STORY_PHOTOS[index]} />
+                </figure>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
+
+      <SauceDrip />
+      <StoryController />
     </section>
   );
 }

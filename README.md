@@ -133,17 +133,45 @@ Photos currently in `public/images/menu/` that no menu item uses: `garlic-bread.
 
 ### Animation
 
-- `public/images/animation/` holds the pictures used for motion. `wing-drip.webp` and
-  `wings-splash.webp` are the wings that fly in and drift around the home page photo, and
-  `sauce-splash.webp` is the splash on the Menu page header (shown from 1280 px wide). They were cut
-  out of the three supplied JPGs, which are still in the same folder.
-- The motion is plain CSS (the "Motion" block in `app/globals.css`) plus two small components,
-  `FloatingWing` and `SauceSplash`. The hero text rises in, section titles and cards fade up as they
-  scroll into view, menu cards lift on hover and buttons press down. There is no animation library
-  and no extra JavaScript.
-- Everything is switched off for visitors whose device is set to reduce motion.
-- To change a picture, replace the WebP with a new cut-out that has a transparent background and
-  update its `width` and `height` in `components/sections/hero.tsx`.
+**The wing story (top of the home page).** Two wings clash above a round plate (the hero photo) and
+drop onto it. As the visitor scrolls, the plate stays pinned, the wings lift away, and the round
+window opens onto four real kitchen photos, one for each caption: wings being **dusted** with spice,
+**cooked** (a fry basket), **tossed** in sauce, and a finished wing with a **bite** taken out. Each
+change has its own transition: the dusting photo opens from the sieve, steam clouds over to bring in
+the basket, a flash of sauce brings in the toss, and then three bites tear the toss photo away to
+show the bitten wing underneath. Spice, steam, sauce drops and crumbs drift over the photos. The
+captions come from `story.steps` in `data/pages/home.json` (exactly four, in that order). Sauce then
+drips from the bottom of the hero into the next section, and a bite is taken out of the corner of
+"Find us".
+
+- `app/story.css` holds the layout and the effects, and `components/story/` the pieces:
+  `story-stage.tsx` (plate, wings, spice, steam, sauce, crumbs), `story-scenes.tsx` (the four
+  photos), `story-controller.tsx` (turns the scroll position into numbers; the only scroll
+  JavaScript), `bite-mask.ts` (the shape of the three bites), `story-photos.ts` (file names and alt
+  text), `static-photo.tsx`, `sauce-drip.tsx` and `bite-edge.tsx`. The opening is plain CSS. To change
+  the timing of the scroll part, edit the numbers in `scene()` in `story-controller.tsx`: it reads
+  like a script, with the beats in the comment at the top.
+- The four photos are `public/images/story/dusting.webp`, `cooking.webp`, `tossing.webp` and
+  `biting.webp` (square, 1200 x 1200). To use the restaurant's own pictures, replace the four files
+  with square photos of the same four moments, keep the names, and update the alt text in
+  `story-photos.ts`. The "Cooked until crisp." caption goes with the fry-basket photo: check how the
+  wings are really cooked and change the caption in `home.json` if needed.
+- `public/images/animation/` holds `wing-sauced.webp` (the wing that falls at the start,
+  transparent, 459 x 241) and `sauce-splash.webp` (the splash on the Menu page header, shown from
+  1280 px wide). They were cut out of the three supplied JPGs, which are still in the same folder. A
+  sharper or different wing can be dropped in as long as it keeps a transparent background and the
+  same shape and size; the spray and drop positions in `story-stage.tsx` assume that picture.
+- Loading: the four photos are not part of the first view. They are added after the page has loaded
+  and the browser is idle (about 80 KB in total on a laptop), so the headline, the plate and the text
+  arrive first. Scrolling only writes a few numbers (as CSS variables) once per frame and never
+  measures the page while moving.
+- Elsewhere the motion is CSS only (the "Motion" block in `app/globals.css`): the hero text rises in,
+  section titles and cards fade up as they scroll into view, menu cards lift on hover and buttons
+  press down. There is no animation library.
+- For visitors whose device is set to reduce motion, or without JavaScript, nothing moves and the
+  four photos are never added to the plate: the plate shows the dish with the wings in place, and the
+  four captions are plain text, each with its photo underneath (these photos are only downloaded by
+  those visitors).
 
 ### Logo and icons
 
@@ -207,7 +235,8 @@ keep the name, address and phone identical to the Google Business Profile.
 - [ ] Menu transcription (`menu-categories.json`, `menu-items.json`, `wing-flavours.json`) proofread against the printed menu
 - [x] Brand name confirmed as "Wings Hub" (two words; the domain and email stay `wingshub.ca`)
 - [ ] Photos for the items that still show a placeholder
-- [ ] The three source images in `public/images/animation/` look like stock-site previews (small, from Adobe Stock and Freepik). Confirm they may be used commercially, or replace them with licensed or original images, and delete the unused JPGs from `public/` before launch
+- [ ] The three source images in `public/images/animation/` look like stock-site previews (small, from Adobe Stock and Freepik), and the four photos in `public/images/story/` also look like stock pictures. Confirm they may be used commercially, or replace them with licensed or original images (the restaurant's own kitchen photos are best), and delete the unused JPGs from `public/` before launch
+- [ ] Owner has checked the four wing story captions in `home.json` (`story.steps`), especially "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from"
 - [ ] Brand copy in `pages/*.json`, `faqs.json` and `seo.json` reviewed
 - [ ] Privacy policy page added (the contact form collects personal information)
 - [ ] Every data file marked `"confirmed"`, then `NEXT_PUBLIC_CONTENT_STATUS=live`

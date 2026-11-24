@@ -1,13 +1,33 @@
 {
   "_meta": {
     "status": "draft",
-    "note": "Plain copy written only from the supplied menu and address. Review with the owner and change anything that does not sound like them."
+    "note": "Plain copy written only from the supplied menu and address. Review with the owner and change anything that does not sound like them. The 'Cooked until crisp' caption goes with the supplied fry-basket photo: the menu does not say how the wings are cooked, so check it with the owner."
   },
   "hero": {
     "headline": ["Wings by the pound.", "40 flavours."],
     "subheadline": "Lightly dusted wings, loaded fries, wraps and quesadillas in Scarborough, Ontario.",
     "primaryCta": { "label": "See the menu", "href": "/menu" },
     "secondaryCta": { "label": "Find us", "href": "/contact" }
+  },
+  "story": {
+    "steps": [
+      {
+        "title": "Lightly dusted.",
+        "text": "Every wing starts with a light dusting before it meets the sauce."
+      },
+      {
+        "title": "Cooked until crisp.",
+        "text": "Hot, golden and crunchy on the outside."
+      },
+      {
+        "title": "Tossed in your flavour.",
+        "text": "Forty to choose from, from Honey Garlic and Buffalo to Bombay Blaze."
+      },
+      {
+        "title": "Now the best part.",
+        "text": "Go on, take a bite."
+      }
+    ]
   },
   "wingsGuide": {
     "title": "How the wings work",

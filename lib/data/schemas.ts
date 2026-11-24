@@ -263,6 +263,8 @@ export const SeoFileSchema = z.object({
 /* Page copy                                                           */
 /* ------------------------------------------------------------------ */
 
+const StoryStep = z.object({ title: text, text });
+
 export const HomePageFileSchema = z.object({
   _meta: DatasetMetaSchema,
   hero: z.object({
@@ -270,6 +272,13 @@ export const HomePageFileSchema = z.object({
     subheadline: text,
     primaryCta: Cta,
     secondaryCta: Cta,
+  }),
+  /**
+   * Captions for the scrolling plate. There are exactly four because the story has four scenes, each
+   * with its own photo: the wings are dusted, cooked, tossed in sauce, then bitten into.
+   */
+  story: z.object({
+    steps: z.tuple([StoryStep, StoryStep, StoryStep, StoryStep]),
   }),
   /** The "wings by the pound" explainer. The price table is built from the listed menu items. */
   wingsGuide: z.object({
