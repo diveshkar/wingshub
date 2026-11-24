@@ -2,7 +2,7 @@
 
 Static-first marketing site for Wings Hub, a restaurant brand serving customers in Canada.
 Built with Next.js 16 (App Router), React 19, TypeScript and Tailwind CSS 4, exported as plain static files and
-hosted on Cloudflare Pages.
+hosted on Cloudflare (a Worker with static assets).
 
 All business content lives in JSON files under `/data`, behind a small data-access layer, so the
 site can later move to a CMS, API or database without rebuilding the front end.
@@ -43,7 +43,7 @@ lib/
   utils/              Formatting helpers
 types/                Domain types (inferred from the Zod schemas)
 public/images/        Photos and brand assets (brand, hero, menu, about)
-public/_headers       Security and cache headers (Cloudflare Pages reads this file)
+public/_headers       Security and cache headers (Cloudflare reads this file)
 public/_redirects     Rewrites that let page-to-page navigation find the exported page data
 ```
 
@@ -75,7 +75,7 @@ Each data file has a `_meta.status` of `"draft"` or `"confirmed"`.
 
 - **Draft mode** (the default when `NEXT_PUBLIC_CONTENT_STATUS` is not set, so local development): a banner
   is shown, pages are `noindex`, and `robots.txt` disallows crawling.
-- **Live mode** (`NEXT_PUBLIC_CONTENT_STATUS=live`, set as a build variable in Cloudflare Pages): no banner,
+- **Live mode** (`NEXT_PUBLIC_CONTENT_STATUS=live`, set as a build variable in Cloudflare): no banner,
   pages are indexable, and `robots.txt` and the sitemap are published. The build fails in live mode while any
   data file is still `"draft"`.
 - All data files are now `"confirmed"`. When you add a new data file or change content that the owner has not
@@ -260,49 +260,54 @@ and extend the data source.
 To strengthen local SEO: add the phone number, opening hours, coordinates and Google Maps link, and
 keep the name, address and phone identical to the Google Business Profile.
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare
 
-The site is built with `output: "export"`: `npm run build` writes plain files to the `out` folder, and Cloudflare
-Pages serves that folder. There is no database, and the only code that runs on a server is the contact form's
-Function (`functions/api/contact.ts`, see below).
+The site is built with `output: "export"`: `npm run build` writes plain files to the `out` folder, and Cloudflare serves
+that folder as static assets (`wrangler.jsonc`). There is no database, and the only code that runs on a server is the
+contact form: `worker/index.ts` answers `/api/*` and calls `functions/api/contact.ts`. Every other address is served
+straight from the files. (The `functions` folder is also what Cloudflare Pages reads, so the same code runs on Pages.)
 
 Because it is a static export, three things differ from a normal Next.js app (see `next.config.ts`):
 Cache Components is off, `next/image` does not resize (photos are shrunk by hand), and the security headers live in
 `public/_headers` instead of `next.config.ts`. The four special files (`robots.ts`, `sitemap.ts`,
 `llms.txt/route.ts`, `opengraph-image.tsx`) carry `export const dynamic = "force-static"` for the same reason.
 
-1. Push the repository to GitHub. In Cloudflare: Workers & Pages > Create > Pages > Connect to Git, and pick it.
-2. Build settings: framework preset **None**, build command `npm run build`, build output directory `out`.
-3. Variables (Settings > Variables and secrets, for Production). The first group is read when the site is built, the
-   second by the contact Function when a message arrives. Mark the keys as **Secret**.
+1. Push the repository to GitHub. In Cloudflare: Workers & Pages > Create application > Import a repository (Git), and
+   pick it. Choose the production branch `cloudflare`.
+2. Build settings: **Build command** `npm run build`, **Deploy command** `npx wrangler deploy` (the default). Leave
+   the root directory empty. Do not let Cloudflare run any "auto-configure" for Next.js: `wrangler.jsonc` already
+   says how the site is served.
+3. Variables. There are two separate lists in the Worker's Settings:
+   - **Build** > Variables and secrets: read when the site is built (the `NEXT_PUBLIC_*` values).
+   - **Variables and secrets** (runtime): read by the contact Function when a message arrives. Mark keys as **Secret**.
 
-   | Variable | Value |
-   | --- | --- |
-   | `NODE_VERSION` | `22` |
-   | `NEXT_PUBLIC_CONTENT_STATUS` | `live` (without it the site is built in draft mode: banner, noindex, crawling blocked) |
-   | `NEXT_PUBLIC_SITE_URL` | `https://wingshub.ca` |
-   | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | public key of the Turnstile check (optional, see below) |
-   | `BREVO_API_KEY` | **secret**, an API key from Brevo (SMTP & API > API keys) |
-   | `TURNSTILE_SECRET_KEY` | **secret**, the matching Turnstile secret key (set together with the site key, or neither) |
-   | `CONTACT_TO` | who receives the messages (default `info@wingshub.ca`) |
-   | `CONTACT_FROM_EMAIL` | sender address, a verified sender in Brevo (default `info@wingshub.ca`) |
-   | `CONTACT_FROM_NAME` | sender name in the inbox (default `Wings Hub website`) |
-   | `ALLOWED_ORIGINS` | addresses the form may be sent from (default `https://wingshub.ca,https://www.wingshub.ca`; add the `*.pages.dev` address while testing) |
+   | Variable | List | Value |
+   | --- | --- | --- |
+   | `NEXT_PUBLIC_CONTENT_STATUS` | Build | `live` (without it the site is built in draft mode: banner, noindex, crawling blocked) |
+   | `NEXT_PUBLIC_SITE_URL` | Build | `https://wingshub.ca` |
+   | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Build | public key of the Turnstile check (optional, see below) |
+   | `BREVO_API_KEY` | Runtime | **secret**, an API key from Brevo (SMTP & API > API keys) |
+   | `TURNSTILE_SECRET_KEY` | Runtime | **secret**, the matching Turnstile secret key (set together with the site key, or neither) |
+   | `ALLOWED_ORIGINS` | Runtime | addresses the form may be sent from (default `https://wingshub.ca,https://www.wingshub.ca`; add the `*.workers.dev` address while testing) |
+   | `CONTACT_TO` | Runtime | who receives the messages (default `info@wingshub.ca`) |
+   | `CONTACT_FROM_EMAIL` | Runtime | sender address, a verified sender in Brevo (default `info@wingshub.ca`) |
+   | `CONTACT_FROM_NAME` | Runtime | sender name in the inbox (default `Wings Hub website`) |
 
-4. Custom domain: Pages project > Custom domains > Set up a domain > `wingshub.ca`. Cloudflare Pages needs the
+4. Custom domain: Worker > Settings > Domains & Routes > Add > Custom domain > `wingshub.ca` (and `www.wingshub.ca`). Cloudflare needs the
    domain's DNS on Cloudflare, so the nameservers at GoDaddy are changed to the two Cloudflare gives you. **Before
    that, make sure every mail record (MX, TXT/SPF, autodiscover, selector1/selector2 DKIM and the other CNAMEs of the
    email service) exists in Cloudflare with the orange cloud off ("DNS only"), or email stops.** `www` is
    redirected to `wingshub.ca` with a Redirect Rule.
-5. **Contact form:** the page posts JSON to `/api/contact`, a Cloudflare Pages Function. It checks the message again,
+5. **Contact form:** the page posts JSON to `/api/contact`, handled by the Worker. It checks the message again,
    verifies the Turnstile token (when Turnstile is set up) and sends one plain-text email with the Brevo API. In
    Brevo: create an account, add and verify the sender address (Senders, domains & dedicated IPs > Senders), create an
    API key, and, so the mail is not treated as spam, authenticate the domain `wingshub.ca` (Brevo gives a TXT record
    and two DKIM CNAMEs to add in Cloudflare DNS). If Brevo answers 401 "unrecognised IP address", switch off
    Authorized IPs under Security, because Cloudflare's addresses change. The Function lives in the same repository:
    do not move the `functions` folder. Locally the form shows its error message (there is no Function in
-   `npm run dev`); test it on the deployed site or with `npx wrangler pages dev out`.
-6. Local check of the static build: `npm run build`, then serve the `out` folder with any static server.
+   `npm run dev`); test it on the deployed site, or locally with `npm run build` and then `npx wrangler dev`
+   (pass `--var ALLOWED_ORIGINS:http://127.0.0.1:8787`, and `--var BREVO_API_KEY:...` to really send).
+6. Local check of the whole thing: `npm run build`, then `npx wrangler dev` (it serves `out` and runs the Worker).
 7. After every new page that is not the home page, add a line for it to `public/_redirects` (copy an existing one).
 8. **Turnstile (optional but recommended):** in Cloudflare > Turnstile > Add widget, add the hostname `wingshub.ca`,
    mode Managed. Put the site key in `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and the secret key in `TURNSTILE_SECRET_KEY`,
