@@ -279,7 +279,7 @@ Cache Components is off, `next/image` does not resize (photos are shrunk by hand
    says how the site is served.
 3. Variables. There are two separate lists in the Worker's Settings:
    - **Build** > Variables and secrets: read when the site is built (the `NEXT_PUBLIC_*` values).
-   - **Variables and secrets** (runtime): read by the contact Function when a message arrives. Mark keys as **Secret**.
+   - **Variables and secrets** (runtime): read by the contact Function when a message arrives. Mark keys as **Secret**. Plain (non-secret) variables belong in `wrangler.jsonc`; only secrets are safe to type into the dashboard.
 
    | Variable | List | Value |
    | --- | --- | --- |
@@ -288,7 +288,7 @@ Cache Components is off, `next/image` does not resize (photos are shrunk by hand
    | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Build | public key of the Turnstile check (optional, see below) |
    | `BREVO_API_KEY` | Runtime | **secret**, an API key from Brevo (SMTP & API > API keys) |
    | `TURNSTILE_SECRET_KEY` | Runtime | **secret**, the matching Turnstile secret key (set together with the site key, or neither) |
-   | `ALLOWED_ORIGINS` | Runtime | addresses the form may be sent from (default `https://wingshub.ca,https://www.wingshub.ca`; add the `*.workers.dev` address while testing) |
+   | `ALLOWED_ORIGINS` | `wrangler.jsonc` (`vars`) | addresses the form may be sent from. It is set in `wrangler.jsonc`, not in the dashboard, because `wrangler deploy` replaces plain variables typed into the dashboard with the file's; the `*.workers.dev` address is there for testing and should be removed when that address is switched off |
    | `CONTACT_TO` | Runtime | who receives the messages (default `info@wingshub.ca`) |
    | `CONTACT_FROM_EMAIL` | Runtime | sender address, a verified sender in Brevo (default `info@wingshub.ca`) |
    | `CONTACT_FROM_NAME` | Runtime | sender name in the inbox (default `Wings Hub website`) |
