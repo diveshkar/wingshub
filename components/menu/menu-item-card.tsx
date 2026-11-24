@@ -49,12 +49,14 @@ export function MenuItemCard({
           responsive ? "w-28 sm:aspect-[4/3] sm:w-auto" : "aspect-[4/3]",
         )}
       >
-        <FoodImage
-          image={item.image}
-          icon={icon}
-          sizes={SIZES[layout]}
-          className="transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
-        />
+        <div className="zoom-photo absolute inset-0">
+          <FoodImage
+            image={item.image}
+            icon={icon}
+            sizes={SIZES[layout]}
+            className="transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transition-none"
+          />
+        </div>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">

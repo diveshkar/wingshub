@@ -1,17 +1,16 @@
-import Image from "next/image";
 import type { CSSProperties } from "react";
-import { HeroLive } from "./hero-live";
+import { FoodImage } from "@/components/ui/food-image";
+import type { MediaImage } from "@/types";
 import { StoryScenes } from "./story-scenes";
-import { STORY_PHOTOS } from "./story-photos";
 
 /** Sets custom properties from data, so the CSS can do the maths. */
 const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
 /* ---------------------------------------------------------------------------------------------
    Positions below are % of the round picture (x across, y down) and distances are in stage widths
-   (1 = 1% of the plate's width), so the same artwork works at any size. They were read off the
-   photos: the sieve in the dusting photo, the wings in the basket and the bitten wing. The movement
-   itself lives in app/story.css and story-controller.tsx.
+   (1 = 1% of the plate's width), so the same artwork works at any size. They were read off the four
+   photos: the sieve in the dusting photo, the wings in the basket, the mouth of the bowl and the
+   bitten wing. The movement itself lives in app/story.css and story-controller.tsx.
    --------------------------------------------------------------------------------------------- */
 
 /** Spice falling from the sieve onto the wings (the sieve is at about 45% across, 33% down). */
@@ -36,6 +35,22 @@ const WISPS = [
   { zone: "bite", x: 48, y: 30, w: 8, h: 20, rise: 22, sway: 2, d: 0.4 },
   { zone: "bite", x: 53, y: 27, w: 7, h: 18, rise: 24, sway: -3, d: 1.8 },
   { zone: "bite", x: 57, y: 29, w: 8, h: 20, rise: 20, sway: 2, d: 3 },
+];
+
+/** Sauce flung up around the mouth of the bowl as the wings are tossed. */
+const DROPS = [
+  { x: 44, y: 46, dx: -26, up: 24, g: 40, sz: 1.8 },
+  { x: 48, y: 44, dx: -16, up: 32, g: 46, sz: 1.3 },
+  { x: 52, y: 46, dx: -6, up: 36, g: 48, sz: 2.2 },
+  { x: 56, y: 44, dx: 6, up: 34, g: 46, sz: 1.5 },
+  { x: 60, y: 47, dx: 16, up: 28, g: 42, sz: 1.9 },
+  { x: 64, y: 49, dx: 26, up: 20, g: 38, sz: 1.2 },
+  { x: 41, y: 50, dx: -32, up: 14, g: 34, sz: 1.1 },
+  { x: 67, y: 51, dx: 31, up: 12, g: 32, sz: 1.4 },
+  { x: 50, y: 42, dx: -10, up: 38, g: 50, sz: 1 },
+  { x: 58, y: 42, dx: 11, up: 38, g: 50, sz: 1.2 },
+  { x: 46, y: 48, dx: -20, up: 22, g: 38, sz: 0.9 },
+  { x: 62, y: 45, dx: 22, up: 24, g: 40, sz: 1 },
 ];
 
 /** Crumbs from each bite, starting where that bite's edge ends up. Eight per bite. */
@@ -63,17 +78,15 @@ const CRUMBS = CRUMB_ORIGINS.map((origin, index) =>
 
 /**
  * The plate that follows the visitor down the home page. It is a round window: it starts as the
- * tossing photo, where two wings meet in mid-air and drop into the bowl of sauce, then opens onto the
- * kitchen photos one after another (dusting, cooking, tossing, biting) as the visitor scrolls. The
- * effects on top (spice, steam, crumbs) are decoration, hidden from assistive technology; the captions
+ * hero photo (it is uncovered when the full-screen opening drains away), then opens onto the kitchen
+ * photos one after another (dusting, cooking, tossing, biting) as the visitor scrolls. The effects on
+ * top (spice, steam, sauce, crumbs) are decoration, hidden from assistive technology; the captions
  * beside it say what is going on.
  *
  * The scroll controller writes each number only onto the element that uses it (the data-scope
  * attributes below), so a change never makes the browser re-check the whole stage.
  */
-export function StoryStage() {
-  const tossing = STORY_PHOTOS[2];
-
+export function StoryStage({ image }: { image: MediaImage | null }) {
   return (
     <div className="story-stage" data-story-stage>
       <div className="story-glow" aria-hidden="true" />
@@ -83,16 +96,8 @@ export function StoryStage() {
         <div className="story-rim" aria-hidden="true" />
 
         <div className="story-lens" data-lens>
-          <div className="scene scene-hero">
-            <Image
-              src={tossing.src}
-              alt={tossing.alt}
-              fill
-              sizes="(min-width: 1024px) 440px, 82vw"
-              priority
-              className="object-cover"
-            />
-            <HeroLive />
+          <div className="scene scene-plate">
+            <FoodImage image={image} icon="wings" sizes="(min-width: 1024px) 440px, 82vw" preload />
           </div>
 
           <StoryScenes />
@@ -138,6 +143,23 @@ export function StoryStage() {
                 ))}
               </div>
             ))}
+
+            <div className="fx-group" data-scope="drops">
+              {DROPS.map((drop, i) => (
+                <i
+                  key={i}
+                  className="drop"
+                  style={vars({
+                    "--x": drop.x,
+                    "--y": drop.y,
+                    "--dx": drop.dx,
+                    "--up": drop.up,
+                    "--g": drop.g,
+                    "--sz": drop.sz,
+                  })}
+                />
+              ))}
+            </div>
 
             {CRUMBS.map((crumbs, bite) => (
               <div key={bite} className="fx-group" data-scope={`crumbs-${bite + 1}`}>

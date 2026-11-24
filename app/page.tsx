@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/hero";
 import { VisitUs } from "@/components/sections/visit-us";
 import { WingsGuide } from "@/components/sections/wings-guide";
 import { JsonLd } from "@/components/seo/json-ld";
+import { IntroSplash } from "@/components/story/intro-splash";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { buildFaqSchema } from "@/lib/seo/schema";
 
@@ -17,6 +18,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <IntroSplash />
       <Hero />
       <WingsGuide />
       <FeaturedItems />

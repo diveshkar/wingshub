@@ -7,7 +7,7 @@ import { StoryController } from "@/components/story/story-controller";
 import { StaticPhoto } from "@/components/story/static-photo";
 import { STORY_PHOTOS } from "@/components/story/story-photos";
 import { StoryStage } from "@/components/story/story-stage";
-import { getPageContent, getPrimaryLocation } from "@/lib/data";
+import { getPageContent, getPrimaryLocation, getRestaurant } from "@/lib/data";
 import { cn } from "@/lib/utils/cn";
 import { hasAddress } from "@/lib/utils/format";
 
@@ -20,8 +20,9 @@ const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
  * made. See app/story.css for the layout and components/story for the pieces.
  */
 export async function Hero() {
-  const [{ hero, story }, location] = await Promise.all([
+  const [{ hero, story }, restaurant, location] = await Promise.all([
     getPageContent("home"),
+    getRestaurant(),
     getPrimaryLocation(),
   ]);
 
@@ -32,6 +33,7 @@ export async function Hero() {
     <section
       aria-labelledby="hero-heading"
       data-story
+      data-intro="wait"
       data-step="-1"
       className="relative isolate overflow-x-clip bg-ink-900 text-bone-50"
     >
@@ -82,7 +84,7 @@ export async function Hero() {
         </div>
 
         <div className="story-sticky">
-          <StoryStage />
+          <StoryStage image={restaurant.media.hero} />
         </div>
 
         <div className="story-track" data-story-track>

@@ -6,9 +6,9 @@ import { useEffect } from "react";
  * Turns the visitor's scroll position into the look of every part of the plate.
  *
  * The story is measured in "beats", s = 0 to 4.3, and there is one caption and one photo per beat:
- *   0 - 1   the tossing photo (its wings have just dropped into the bowl) opens onto the dusting photo; spice falls
+ *   0 - 1   the plate opens onto the dusting photo; spice falls
  *   1 - 2   steam clouds over and the plate becomes the cooked wings in the basket
- *   2 - 3   a splash of sauce sweeps in and the plate becomes the toss: the wings climb back out of the bowl
+ *   2 - 3   a splash of sauce sweeps in and the plate becomes the toss
  *   3 - 4.3 three bites eat the toss away, and what is underneath is the bitten wing
  * Nothing here moves anything itself. It only writes numbers; app/story.css decides how they look.
  *
@@ -55,11 +55,10 @@ function scene(s: number): Scene {
     cook: seg(s, 1, 2.1),
     steam1: ease(seg(s, 1.2, 1.5)) * (1 - ease(seg(s, 2.05, 2.4))),
 
-    // A flash of sauce while the tossing photo fades in; the wings climb out of the bowl and sauce flies.
+    // A flash of sauce while the tossing photo fades in; drops fly while it plays.
     t3: ease(seg(s, 2, 2.4)),
     flash: hump(seg(s, 2, 2.4)),
     toss: seg(s, 2, 3.1),
-    rise: ease(seg(s, 2.2, 2.95)),
     splash: seg(s, 2.2, 2.95),
 
     // The bites.
@@ -81,7 +80,8 @@ const SCOPES: Record<string, string[]> = {
   dust: ["t1", "dust"],
   cook: ["t2", "cook"],
   bite: ["bite-vis", "bitek"],
-  toss: ["t3", "toss", "rise", "splash", "bite1", "bite2", "bite3"],
+  toss: ["t3", "toss", "bite1", "bite2", "bite3"],
+  drops: ["splash"],
   veil: ["veil"],
   flash: ["flash"],
   specks: ["spice", "spice-a"],

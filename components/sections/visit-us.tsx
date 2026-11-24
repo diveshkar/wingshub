@@ -21,7 +21,7 @@ export async function VisitUs() {
           />
           <VisitDetails tone="dark" className="mt-8" />
         </div>
-        <LocationMap location={location} className="aspect-[4/3] lg:aspect-auto lg:min-h-[26rem]" />
+        <LocationMap location={location} className="reveal aspect-[4/3] lg:aspect-auto lg:min-h-[26rem]" />
       </Container>
     </Section>
   );

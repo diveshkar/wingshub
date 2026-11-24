@@ -13,7 +13,7 @@ export async function FaqSection() {
       <Container className="grid grid-cols-1 gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
         <SectionHeading id="faq-heading" title={faq.title} description={faq.description} />
 
-        <div className="border-t border-ink-900/15">
+        <div className="reveal border-t border-ink-900/15">
           {faqs.map((item) => (
             <details key={item.id} name="faq" className="group border-b border-ink-900/15">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-base font-bold leading-snug sm:text-lg [&::-webkit-details-marker]:hidden">
