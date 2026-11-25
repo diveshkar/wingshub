@@ -22,58 +22,64 @@
       "sortOrder": 3
     },
     {
+      "id": "faq-dine-in-takeout",
+      "question": "Can I dine in, pick up my order or get delivery?",
+      "answer": "Yes to all three. You can eat at the restaurant, pick up your order, or have it delivered through Uber Eats or DoorDash.",
+      "sortOrder": 4
+    },
+    {
       "id": "faq-menu",
       "question": "What is on the Wings Hub menu?",
       "answer": "Our menu covers bone-in, boneless and veggie wings in 40 flavours, wraps, quesadillas, appetizers, fries and poutine, combos and bundles, and extra dips and sauces. Prices are in Canadian dollars and listed on the menu page.",
-      "sortOrder": 4
+      "sortOrder": 5
     },
     {
       "id": "faq-how-wings-are-sold",
       "question": "How are the wings sold?",
       "answer": "Wings are sold by the pound. Bone-in wings come in 8 to 9 pieces per pound, boneless wings in 8 to 10 and veggie wings in 10 to 12. Larger orders let you choose more flavours: one flavour up to 2 lb, two flavours for 3 to 4 lb and three flavours for 5 lb.",
-      "sortOrder": 5
+      "sortOrder": 6
     },
     {
       "id": "faq-spice",
       "question": "How spicy are the wings?",
       "answer": "Our spicy levels run from 1 to 6, with 6 the hottest. Menu items that have a spicy level are marked on the menu page.",
-      "sortOrder": 6
+      "sortOrder": 7
     },
     {
       "id": "faq-halal",
       "question": "Is the food halal?",
       "answer": "Yes, the food at Wings Hub is halal.",
-      "sortOrder": 7
+      "sortOrder": 8
     },
     {
       "id": "faq-veggie",
       "question": "Do you have veggie options?",
       "answer": "Yes. The menu includes Veggie Wings, a Veg Wrap and Deep Fried Cauli-Bites. We cannot guarantee that any menu item is completely free from cross-contamination.",
-      "sortOrder": 8
+      "sortOrder": 9
     },
     {
       "id": "faq-online-ordering",
       "question": "Can I order online?",
       "answer": "Yes. You can order online through Uber Eats and DoorDash.",
-      "sortOrder": 9
+      "sortOrder": 10
     },
     {
       "id": "faq-payment",
       "question": "What payment methods do you accept?",
       "answer": "We accept cash and card.",
-      "sortOrder": 10
+      "sortOrder": 11
     },
     {
       "id": "faq-tax",
       "question": "Do the menu prices include tax?",
       "answer": "No. Menu prices are shown without tax, and tax is added to your bill.",
-      "sortOrder": 11
+      "sortOrder": 12
     },
     {
       "id": "faq-contact",
       "question": "How can I contact Wings Hub?",
       "answer": "Call us on (416) 666-3760, email info@wingshub.ca or send a message using the contact form on our contact page.",
-      "sortOrder": 12
+      "sortOrder": 13
     }
   ]
 }

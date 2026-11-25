@@ -37,8 +37,8 @@
     { "name": "DoorDash", "url": null }
   ],
   "services": {
-    "dineIn": null,
-    "takeaway": null,
+    "dineIn": true,
+    "takeaway": true,
     "delivery": true,
     "reservations": null
   }
