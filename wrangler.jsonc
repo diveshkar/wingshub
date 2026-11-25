@@ -14,6 +14,11 @@
   },
   "observability": { "enabled": true },
 
+  // The free *.workers.dev address and the preview addresses stay OFF. Without these two lines every deploy
+  // switches them back on, and Google would see a second copy of the site. The site lives on wingshub.ca only.
+  "workers_dev": false,
+  "preview_urls": false,
+
   // Settings that are not secret live here, so a deploy can never wipe them. (Without this, `wrangler deploy`
   // replaces whatever was typed into the Cloudflare dashboard with what is in this file.)
   // ALLOWED_ORIGINS = the addresses the contact form may be sent from.
