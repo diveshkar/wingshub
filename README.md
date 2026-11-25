@@ -288,7 +288,7 @@ Cache Components is off, `next/image` does not resize (photos are shrunk by hand
    | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Build | public key of the Turnstile check (optional, see below) |
    | `BREVO_API_KEY` | Runtime | **secret**, an API key from Brevo (SMTP & API > API keys) |
    | `TURNSTILE_SECRET_KEY` | Runtime | **secret**, the matching Turnstile secret key (set together with the site key, or neither) |
-   | `ALLOWED_ORIGINS` | `wrangler.jsonc` (`vars`) | addresses the form may be sent from. It is set in `wrangler.jsonc`, not in the dashboard, because `wrangler deploy` replaces plain variables typed into the dashboard with the file's; the `*.workers.dev` address is there for testing and should be removed when that address is switched off |
+   | `ALLOWED_ORIGINS` | `wrangler.jsonc` (`vars`) | addresses the form may be sent from. It is set in `wrangler.jsonc`, not in the dashboard, because `wrangler deploy` replaces plain variables typed into the dashboard with the file's |
    | `CONTACT_TO` | Runtime | who receives the messages (default `info@wingshub.ca`) |
    | `CONTACT_FROM_EMAIL` | Runtime | sender address, a verified sender in Brevo (default `info@wingshub.ca`) |
    | `CONTACT_FROM_NAME` | Runtime | sender name in the inbox (default `Wings Hub website`) |
