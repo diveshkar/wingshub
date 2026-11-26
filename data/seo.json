@@ -4,21 +4,21 @@
   },
   "defaults": {
     "titleTemplate": "%s | Wings Hub",
-    "description": "Wings Hub in Scarborough, Ontario serves halal, lightly dusted wings in 40 flavours, plus loaded fries, wraps and quesadillas."
+    "description": "Wings Hub in Scarborough, Ontario serves halal, lightly dusted wings in 60 flavours, plus loaded fries, wraps and quesadillas."
   },
   "pages": {
     "home": {
       "title": "Wings Hub | Chicken Wings, Wraps & Fries in Scarborough, ON",
-      "description": "Wings Hub in Scarborough serves halal, lightly dusted wings in 40 flavours, plus loaded fries, wraps and quesadillas. See the menu and find us.",
+      "description": "Wings Hub in Scarborough serves halal, lightly dusted wings in 60 flavours, plus loaded fries, wraps and quesadillas. See the menu and find us.",
       "absoluteTitle": true
     },
     "menu": {
       "title": "Menu: Wings, Wraps, Fries & Bundles",
-      "description": "Browse the Wings Hub menu: bone-in, boneless and veggie wings in 40 flavours, wraps, quesadillas, fries, appetizers and bundles. Prices in CAD."
+      "description": "Browse the Wings Hub menu: bone-in, boneless and veggie wings in 60 flavours, wraps, quesadillas, fries, appetizers and bundles. Prices in CAD."
     },
     "about": {
       "title": "About Us",
-      "description": "Wings Hub is a halal wings restaurant in Scarborough, Ontario. Wings by the pound in 40 flavours, plus loaded fries, wraps and quesadillas."
+      "description": "Wings Hub is a halal wings restaurant in Scarborough, Ontario. Wings by the pound in 60 flavours, plus loaded fries, wraps and quesadillas."
     },
     "contact": {
       "title": "Contact & Location",

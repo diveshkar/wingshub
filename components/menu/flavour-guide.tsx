@@ -28,8 +28,26 @@ export function FlavourGuide({ flavours }: { flavours: WingFlavours }) {
         </div>
 
         {flavours.image && (
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-            <FoodImage image={flavours.image} icon="wings" sizes="(min-width: 1024px) 440px, 100vw" />
+          // Rises into view like the dish photos (.reveal); the picture inside settles from a close-up as the
+          // box scrolls past (.zoom-photo, see app/globals.css). The soft fade at the foot and the thin edge
+          // line keep it calm on the dark card.
+          <div className="reveal relative mx-auto aspect-[9/10] w-full max-w-sm overflow-hidden rounded-lg lg:max-w-none">
+            <div className="zoom-photo absolute inset-0">
+              <FoodImage
+                image={flavours.image}
+                icon="wings"
+                sizes="(min-width: 1024px) 440px, 90vw"
+                className="object-[50%_20%]"
+              />
+            </div>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900/55 via-transparent to-transparent"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-bone-50/10"
+            />
           </div>
         )}
       </div>

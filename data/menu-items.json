@@ -714,6 +714,25 @@
       "sortOrder": 11
     },
     {
+      "id": "item-mac-n-cheese-rolls",
+      "slug": "mac-n-cheese-rolls",
+      "categoryId": "cat-appetizers",
+      "name": "Mac N Cheese Rolls (3)",
+      "description": null,
+      "prices": [
+        {
+          "label": null,
+          "amount": 9
+        }
+      ],
+      "spiceLevel": null,
+      "featured": false,
+      "badges": [],
+      "available": true,
+      "image": null,
+      "sortOrder": 12
+    },
+    {
       "id": "item-basket-of-fries",
       "slug": "basket-of-fries",
       "categoryId": "cat-fries",

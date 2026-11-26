@@ -6,15 +6,25 @@
   "description": "Pick your flavour for every order of wings. Bigger orders let you mix in more flavours.",
   "afterCategorySlug": "wings",
   "image": {
-    "src": "/images/menu/wing-flavours.jpg",
-    "alt": "Plates of crispy bone-in wings and boneless wings drizzled with ranch, with dips and spices"
+    "src": "/images/menu/chef-tossing-wings.webp",
+    "alt": "A cook in a black chef's jacket and white gloves tosses sauced wings in a steel bowl in the kitchen"
   },
   "groups": [
     {
       "id": "heat-seekers",
       "name": "Heat Seekers",
       "sortOrder": 1,
-      "flavours": ["Bombay Blaze", "Chili & Onion", "Mad Mango", "Mad Ranch", "Hub BBQ", "Cyloniya", "Hub Mamba"]
+      "flavours": [
+        "Bombay Blaze",
+        "Bombay",
+        "Chili & Onion",
+        "Mad Mango",
+        "Mad Ranch",
+        "Nashville Garlic Parm",
+        "Hub BBQ",
+        "Cyloniya",
+        "Hub Mamba"
+      ]
     },
     {
       "id": "sweet-savoury",
@@ -27,28 +37,51 @@
         "Honey Garlic Parm",
         "Honey Lemon",
         "Honey Roasted Garlic",
+        "Buffalo Honey",
+        "Honey Cajun",
         "Honeymoon",
         "Hot Honey",
-        "Hot Sweet Heart"
+        "Hub Sweet Heart"
       ]
     },
     {
       "id": "ranch-creation",
       "name": "Ranch Creation",
       "sortOrder": 3,
-      "flavours": ["Classy Ranch", "Creamy Buffalo", "Creamy Honey", "Pepperi Ranch"]
+      "flavours": [
+        "Classy Ranch",
+        "Creamy Buffalo",
+        "Creamy Honey",
+        "Pepperi Ranch",
+        "Frank's Ranch",
+        "Fiery & Frost",
+        "Montana's BBQ"
+      ]
     },
     {
       "id": "hub-signature",
       "name": "Hub Signature",
       "sortOrder": 4,
-      "flavours": ["Ram's Secret", "Spicy Garlic Parm", "Mango Firestorm", "Tandoori Blaze"]
+      "flavours": [
+        "Ram's Secret",
+        "Spicy Garlic Parm",
+        "Mango Firestorm",
+        "Tandoori Blaze",
+        "Spicy BBQ",
+        "Spicy Blu",
+        "Hub Lemon Pepper"
+      ]
     },
     {
       "id": "garlic-lovers",
       "name": "Garlic Lovers",
       "sortOrder": 5,
-      "flavours": ["Cajun Garlic", "Golden Garlic Parmesan", "Garlic Knockout", "Hub Garlic Parm"]
+      "flavours": [
+        "Cajun Garlic",
+        "Golden Garlic Parmesan",
+        "Garlic Kickout",
+        "Hub Garlic Parm"
+      ]
     },
     {
       "id": "the-classics",
@@ -62,16 +95,36 @@
         "Lemon Pepper",
         "Medium",
         "Mild",
-        "Hot",
         "Viper Lemon",
-        "Cajun Fire"
+        "Cajun Fire",
+        "Dill Parm",
+        "American",
+        "BBQ Garlic Parm",
+        "Cajun",
+        "Dill BBQ",
+        "Salt & Pepper",
+        "Sweet Chili"
+      ]
+    },
+    {
+      "id": "global-flavours",
+      "name": "Global Flavours",
+      "sortOrder": 7,
+      "flavours": [
+        "Caribbean",
+        "Pineapple Curry",
+        "Pineapple Jerk",
+        "Hub Thai"
       ]
     },
     {
       "id": "hubs-made",
       "name": "Hub's Made",
-      "sortOrder": 7,
-      "flavours": ["K.K's Magic", "Crispy Partner"]
+      "sortOrder": 8,
+      "flavours": [
+        "K.K's Magic",
+        "Crispy Partner"
+      ]
     }
   ]
 }

@@ -111,7 +111,7 @@ Each data file has a `_meta.status` of `"draft"` or `"confirmed"`.
 
 `wing-flavours.json` holds the flavour guide: groups of flavour names, an intro and an optional
 photo. `afterCategorySlug` decides which menu category it appears after (currently `wings`). The
-count shown on the site ("40 flavours") is calculated from the list.
+count shown on the menu page ("60 flavours") is calculated from the list. The number is also written out in some copy by hand (the home headline in `home.json`, `restaurant.json`, `seo.json`, `faqs.json`, `about.json`, `menu.json`): when the flavour count changes, search `data/` for the old number and change it everywhere. The share image (`opengraph-image`) is drawn at build time from the tagline in `restaurant.json`.
 
 ### Adding photos
 
@@ -134,6 +134,8 @@ the cards, so those edges were trimmed. The untouched originals are in `.photo-b
 Photos currently in `public/images/menu/` that no menu item uses: `garlic-bread.jpg`,
 `cheesy-garlic-bread.jpg` (not on the supplied menu), `wings-cream-sauce-parmesan.jpg`,
 `wings-three-styles.jpg`, `boneless-wings-dark.jpg` and `wing-flavours-wide.jpg`.
+
+The wing flavour guide on the menu page shows `public/images/menu/chef-tossing-wings.webp` (a cook tossing wings, the same picture as on the printed menu; set in `wing-flavours.json`). It rises into view and settles from a close-up as it scrolls (the `.reveal` and `.zoom-photo` classes in `app/globals.css`, plain CSS, no animation library). `wing-flavours.jpg` is no longer used.
 
 ### Animation
 
@@ -330,7 +332,7 @@ Still open (the site works without them, but they should be dealt with):
 - [ ] Optional: coordinates and Google Maps link in `locations.json`, social links in `restaurant.json`
 - [ ] Photos for the menu items that still show no picture
 - [ ] The four photos in `public/images/story/` (and the two wings and backdrop in `public/images/intro/`, cut from a supplied picture) look like stock pictures. Confirm they may be used commercially, or replace them with licensed or original images (the restaurant's own kitchen photos are best)
-- [ ] The four captions in `home.json` (`story.steps`): "Cooked until crisp." (are the wings fried or baked?) and "Forty to choose from"
+- [ ] The four captions in `home.json` (`story.steps`): "Cooked until crisp." (are the wings fried or baked?) and "Sixty to choose from"
 - [ ] After the first deploy: send a test message through the contact form, confirm it reaches `info@wingshub.ca` (check spam), and submit `https://wingshub.ca/sitemap.xml` in Google Search Console and Bing Webmaster Tools
 
 ## Security
